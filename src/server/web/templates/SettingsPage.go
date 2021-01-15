@@ -104,6 +104,12 @@ var settingsPage = `
 			    <input id="DisableLimiting" class="form-check-input" type="checkbox" autocomplete="off">
                 <label for="DisableLimiting">DisableAcceptRateLimiting</label>
             </div>
+			<div class="input-group">
+                <div class="input-group-prepend">
+                    <div class="input-group-text">Таймаут стратегии по-дефолту</div>
+                </div>
+                <input id="TimeStrategy" class="form-control" type="number" autocomplete="off">
+            </div>
 		<br>
             <div class="input-group">
                 <div class="input-group-prepend">
@@ -194,6 +200,8 @@ var settingsPage = `
 
 			data.TorrentDisconnectTimeout = Number($('#TorrentDisconnectTimeout').val());
 			
+			data.TimeStrategy = Number($('#TimeStrategy').val());
+			
 			data.EnableIPv6 = $('#EnableIPv6').prop('checked');
 			data.DisableTCP = $('#DisableTCP').prop('checked');
 			data.DisableUTP = $('#DisableUTP').prop('checked');
@@ -232,6 +240,7 @@ var settingsPage = `
          			$('#CacheSize').val(data.CacheSize/(1024*1024));
 					$('#PreloadBufferSize').val(data.PreloadBufferSize/(1024*1024));
 					$('#TorrentDisconnectTimeout').val(data.TorrentDisconnectTimeout);
+					$('#TimeStrategy').val(data.TimeStrategy);
 					
 					$('#EnableIPv6').prop('checked', data.EnableIPv6);
 					$('#DisableTCP').prop('checked', data.DisableTCP);

@@ -100,7 +100,8 @@ func (bt *BTServer) configure() {
 	} else if settings.Get().ChooseStrategy == 2 {
 		bt.config.DefaultRequestStrategy = torrent.RequestStrategyFuzzing()
 	} else {
-		bt.config.DefaultRequestStrategy = torrent.RequestStrategyDuplicateRequestTimeout(5 * time.Second)
+		Timeout := settings.Get().TimeStrategy
+		bt.config.DefaultRequestStrategy = torrent.RequestStrategyDuplicateRequestTimeout(Timeout * time.Second)
 	}
 	if settings.Get().DhtConnectionLimit > 0 {
 		bt.config.ConnTracker.SetMaxEntries(settings.Get().DhtConnectionLimit)

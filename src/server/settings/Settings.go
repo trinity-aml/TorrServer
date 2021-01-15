@@ -23,6 +23,7 @@ func init() {
 	sets.RetrackersMode = 1
 	sets.TorrentDisconnectTimeout = 30
 	sets.ChooseStrategy = 0
+	sets.TimeStrategy = 5
 	sets.DropPeers = true
 	sets.DropIds = false
 	sets.DisableLimiting = true
@@ -36,7 +37,9 @@ type Settings struct {
 	RetrackersMode int //0 - don`t add, 1 - add retrackers, 2 - remove retrackers
 
 	ChooseStrategy int //0 - default speed strategy (balanced), 1 - fast, 2 - fuzzing
-
+	
+	TimeStrategy int //5 - default timeout for default strategy
+	
 	//BT Config
 	EnableIPv6         bool
 	EnableDebug        bool
