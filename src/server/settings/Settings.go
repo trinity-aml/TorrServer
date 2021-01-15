@@ -38,7 +38,7 @@ type Settings struct {
 
 	ChooseStrategy int //0 - default speed strategy (balanced), 1 - fast, 2 - fuzzing
 	
-	TimeStrategy int //5 - default timeout for default strategy
+	TimeStrategy time.Duration //5 - default timeout for default strategy
 	
 	//BT Config
 	EnableIPv6         bool
