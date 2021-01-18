@@ -68,9 +68,9 @@ func (bt *BTServer) configure() {
 	//blocklist, _ := iplist.MMapPackedFile(filepath.Join(settings.Path, "blocklist"))
 	blocklist, _ := utils.ReadBlockedIP()
 
-	userAgent := "uTorrent/3.5.5"
-	peerID := "-UT3550-"
-	cliVers := "µTorrent 3.5.5"
+	userAgent := "qBittorrent/4.3.2"
+	peerID := "-qB4320-"
+	cliVers := userAgent //"uTorrent/2210(25302)"
 
 	bt.config = torrent.NewDefaultClientConfig()
 
@@ -95,6 +95,7 @@ func (bt *BTServer) configure() {
 	bt.config.HTTPUserAgent = userAgent
 	bt.config.ExtendedHandshakeClientVersion = cliVers
 	bt.config.EstablishedConnsPerTorrent = settings.Get().ConnectionsLimit
+	bt.config.UpnpID = "YouROK/TorrServer"
 	if settings.Get().ChooseStrategy == 1 {
 		bt.config.DefaultRequestStrategy = torrent.RequestStrategyFastest()
 	} else if settings.Get().ChooseStrategy == 2 {
