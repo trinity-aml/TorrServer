@@ -25,8 +25,8 @@ func init() {
 	sets.ChooseStrategy = 0
 	sets.TimeStrategy = 5
 	sets.DropPeers = true
-	sets.DropIds = true
-	sets.DisableLimiting = true
+	sets.DropIds = false
+	sets.DisableLimiting = false
 	StartTime = time.Now()
 }
 
