@@ -96,9 +96,6 @@ func (bt *BTServer) configure() {
 	bt.config.ExtendedHandshakeClientVersion = cliVers
 	bt.config.EstablishedConnsPerTorrent = settings.Get().ConnectionsLimit
 	bt.config.UpnpID = "YouROK/TorrServer"
-	bt.config.TorrentPeersHighWater = 500
-	bt.config.TorrentPeersLowWater = 50
-	bt.config.HandshakesTimeout = 4 * time.Second
 	if settings.Get().ChooseStrategy == 1 {
 		bt.config.DefaultRequestStrategy = torrent.RequestStrategyFastest()
 	} else if settings.Get().ChooseStrategy == 2 {
