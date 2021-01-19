@@ -139,12 +139,16 @@ func (t *Torrent) GotInfo() bool {
 	t.status = TorrentGettingInfo
 	if t.WaitInfo() {
 		t.status = TorrentWorking
-		t.expiredTime = time.Now().Add(time.Minute * 5)
+		t.AddExpiredTime(time.Minute * 5)
 		return true
 	} else {
 		t.Close()
 		return false
 	}
+}
+
+func (t *Torrent) AddExpiredTime(duration time.Duration) {
+	t.expiredTime = time.Now().Add(duration)
 }
 
 func (t *Torrent) watch() {
@@ -164,7 +168,7 @@ func (t *Torrent) watch() {
 
 func (t *Torrent) progressEvent() {
 	if t.expired() {
-		t.drop()
+		t.bt.RemoveTorrent(t.Hash())
 		return
 	}
 
@@ -247,7 +251,7 @@ func (t *Torrent) CloseReader(reader *reader.Reader) {
 	t.muReader.Lock()
 	reader.Close()
 	t.cache.RemReader(reader)
-	t.expiredTime = time.Now().Add(time.Second * time.Duration(settings.Get().TorrentDisconnectTimeout))
+	t.AddExpiredTime(time.Second * time.Duration(settings.Get().TorrentDisconnectTimeout))
 	t.muReader.Unlock()
 }
 
@@ -299,7 +303,7 @@ func (t *Torrent) Preload(file *torrent.File, size int64) {
 	}
 	defer func() {
 		t.CloseReader(readerPre)
-		t.expiredTime = time.Now().Add(time.Minute * 5)
+		t.AddExpiredTime(time.Minute * 5)
 	}()
 
 	if endPreloadOffset > 0 {
@@ -311,7 +315,7 @@ func (t *Torrent) Preload(file *torrent.File, size int64) {
 		readerPost.SetReadahead(buff5mb)
 		defer func() {
 			t.CloseReader(readerPost)
-			t.expiredTime = time.Now().Add(time.Minute * 5)
+			t.AddExpiredTime(time.Minute * 5)
 		}()
 	}
 
@@ -323,7 +327,7 @@ func (t *Torrent) Preload(file *torrent.File, size int64) {
 	var lastSize int64 = 0
 	errCount := 0
 	for t.status == TorrentPreload {
-		t.expiredTime = time.Now().Add(time.Minute * 5)
+		t.AddExpiredTime(time.Minute * 5)
 		t.PreloadedBytes = t.Torrent.BytesCompleted()
 		log.Println("Preload:", file.Torrent().InfoHash().HexString(), bytes.Format(t.PreloadedBytes), "/", bytes.Format(t.PreloadSize), "Speed:", utils.Format(t.DownloadSpeed), "Peers:[", t.Torrent.Stats().ConnectedSeeders, "]", t.Torrent.Stats().ActivePeers, "/", t.Torrent.Stats().TotalPeers)
 		if t.PreloadedBytes >= t.PreloadSize {
