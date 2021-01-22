@@ -106,6 +106,19 @@ func (bt *BTServer) configure() {
 	}
 	if settings.Get().DhtConnectionLimit > 0 {
 		bt.config.ConnTracker.SetMaxEntries(settings.Get().DhtConnectionLimit)
+	} else if settings.Get().DhtConnectionLimit == 0 {
+		if !settings.Get().DisableDHT {
+			bt.config.TorrentPeersHighWater = 3000
+		}
+	}
+	if !settings.Get().DisableDHT {
+		bt.config.TorrentPeersLowWater = 50
+//		bt.config.HandshakesTimeout = 4
+	}
+	if settings.Get().ConnectionsLimit < 50 {
+		bt.config.HalfOpenConnsPerTorrent = settings.Get().ConnectionsLimit
+	} else {
+		bt.config.HalfOpenConnsPerTorrent = 50
 	}
 	if settings.Get().DownloadRateLimit > 0 {
 		bt.config.DownloadRateLimiter = utils.Limit(settings.Get().DownloadRateLimit * 1024)
