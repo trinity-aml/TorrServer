@@ -190,16 +190,9 @@ func (t *Torrent) progressEvent() {
 	}
 	t.muTorrent.Unlock()
 	t.lastTimeSpeed = time.Now()
-	if t.BytesReadUsefulData > settings.Get().PreloadBufferSize {
-		adj := int64((int(t.cache.GetState().PiecesLength) * t.Torrent.Stats().ActivePeers) / (1 + t.cache.ReadersLen()))
-		switch {
-		case adj < t.cache.GetState().PiecesLength:
-			adj = t.cache.GetState().PiecesLength
-		case adj > t.cache.GetState().PiecesLength*4:
-			adj = t.cache.GetState().PiecesLength * 4
-		}
-		t.cache.AdjustRA(adj)
-		//log.Println("Status:", t.Name(), "S:", fmt.Sprintf("%8s", utils.Format(t.DownloadSpeed)), "P:", fmt.Sprintf("%2d", t.Torrent.Stats().ActivePeers), "/", fmt.Sprintf("%2d", t.Torrent.Stats().TotalPeers), "R:", t.cache.ReadersLen(), "RA:", utils.Format(float64(adj)))
+	
+	if (t.BytesReadUsefulData > settings.Get().PreloadBufferSize) {
+		t.cache.AdjustRA(utils.GetReadahead(int64(t.cache.GetState().PiecesLength)))
 	}
 }
 
@@ -240,7 +233,7 @@ func (t *Torrent) NewReader(file *torrent.File, readahead int64) *reader.Reader 
 	defer t.muReader.Unlock()
 	reader := reader.NewReader(file)
 	if readahead <= 0 {
-		readahead = t.cache.GetState().PiecesLength
+		readahead = utils.GetReadahead(int64(t.cache.GetState().PiecesLength))
 	}
 	reader.SetReadahead(readahead)
 	t.cache.AddReader(reader)

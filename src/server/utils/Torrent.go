@@ -33,25 +33,24 @@ var defTrackers = []string{
 
 	"udp://explodie.org:6969/announce",
 
-	//https://github.com/ngosang/trackerslist/blob/master/trackers_best_ip.txt 14.01.2020
+	//https://github.com/ngosang/trackerslist/blob/master/trackers_best_ip.txt 01.02.2020
+	"udp://151.80.120.112:2710/announce",
 	"udp://93.158.213.92:1337/announce",
-	"udp://181.43.19.147:1337/announce",
+	"udp://138.255.103.83:1337/announce",
 	"udp://194.182.165.153:6969/announce",
 	"udp://208.83.20.20:6969/announce",
+	"udp://184.105.151.164:6969/announce",
 	"udp://79.111.118.59:60889/announce",
 	"http://93.157.234.32:60889/announce",
-	"udp://184.105.151.164:6969/announce",
-	"udp://62.210.97.59:1337/announce",
-	"http://62.210.97.59:1337/announce",
-	"http://54.37.106.164:80/announce",
+	"udp://51.81.46.170:6969/announce",
+	"udp://51.68.199.47:6969/announce",
+	"udp://5.206.60.196:6969/announce",
+	"udp://185.181.60.67:80/announce",
 	"udp://91.216.110.52:451/announce",
 	"udp://89.234.156.205:451/announce",
-	"udp://5.206.60.196:6969/announce",
 	"udp://5.226.148.20:6969/announce",
-	"udp://185.181.60.67:80/announce",
-	"udp://51.15.55.204:1337/announce",
 	"udp://37.235.174.46:2710/announce",
-
+	"udp://138.201.150.56:6969/announce",
 }
 
 var loadedTrackers []string
@@ -104,14 +103,13 @@ func GotInfo(t *torrent.Torrent, timeout int) error {
 	}
 }
 
-func GetReadahead() int64 {
+func GetReadahead(piece_l int64) int64 {
 	readahead := int64(float64(settings.Get().CacheSize) * 0.33)
-	if readahead < 66*1024*1024 {
-		readahead = int64(settings.Get().CacheSize)
-		if readahead > 66*1024*1024 {
-				readahead = 66 * 1024 * 1024
-		}
+	piece_q := int64(readahead/piece_l)
+	if piece_q < 4 {
+		piece_q = 4
 	}
+	readahead = piece_l * piece_q
 	return readahead
 }
 

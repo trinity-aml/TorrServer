@@ -1,4 +1,4 @@
 package version
 
-const Version = "1.1.80"
-const VerInt = 80
+const Version = "1.1.81"
+const VerInt = 81
