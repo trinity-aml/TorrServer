@@ -5,7 +5,9 @@ import (
 	"io"
 	"sync"
 	"time"
-
+	"math/rand"
+	"net"
+	
 	"server/settings"
 	"server/torr/storage/memcache"
 	"server/torr/storage/state"
@@ -95,7 +97,7 @@ func (bt *BTServer) configure() {
 	bt.config.HTTPUserAgent = userAgent
 	bt.config.ExtendedHandshakeClientVersion = cliVers
 	bt.config.EstablishedConnsPerTorrent = settings.Get().ConnectionsLimit
-	bt.config.UpnpID = "YouROK/TorrServer"
+	bt.config.UpnpID = "YouROK/TorrServer_v1"
 	if settings.Get().ChooseStrategy == 1 {
 		bt.config.DefaultRequestStrategy = torrent.RequestStrategyFastest()
 	} else if settings.Get().ChooseStrategy == 2 {
@@ -123,6 +125,27 @@ func (bt *BTServer) configure() {
 	}
 	if settings.Get().PeersListenPort > 0 {
 		bt.config.ListenPort = settings.Get().PeersListenPort
+	} else if settings.Get().PeersListenPort == 0 {
+		for {
+			m := 0
+			a := 1024
+			b := 32786
+			rand.Seed(time.Now().UnixNano())
+			n := a + rand.Intn(b-a+1)
+			port := fmt.Sprintf(":%d", n)
+			l, err := net.Listen("tcp", port)
+			defer l.Close()
+			if err == nil {
+				bt.config.ListenPort = n
+				log.Println("Open peers listen port:", n)
+				m = 1
+			} else {
+				log.Println("Error:", err)
+			}
+			if m == 1 {
+				break
+			}
+		}
 	}
 	log.Println("Configure client:", settings.Get())
 }
