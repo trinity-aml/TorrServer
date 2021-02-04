@@ -126,6 +126,10 @@ func (bt *BTServer) configure() {
 	if settings.Get().PeersListenPort > 0 {
 		bt.config.ListenPort = settings.Get().PeersListenPort
 	} else if settings.Get().PeersListenPort == 0 {
+		if settings.Get().DisableUPNP == true {
+			bt.config.NoDefaultPortForwarding = false
+			settings.Get().DisableUPNP = false
+		}
 		for {
 			m := 0
 			a := 1024
@@ -143,6 +147,7 @@ func (bt *BTServer) configure() {
 				log.Println("Error:", err)
 			}
 			if m == 1 {
+				settings.Get().PeersListenPort = n
 				break
 			}
 		}
