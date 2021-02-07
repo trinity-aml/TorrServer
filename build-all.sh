@@ -73,3 +73,41 @@ if [[ "${FAILURES}" != "" ]]; then
   exit 1
 fi
 
+export CGO_ENABLED=1
+export GOOS=android
+export LDFLAGS="-s -w"
+
+$GOBIN version
+
+export NDK_TOOLCHAIN=/home/trinity1980/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64
+export CC=$NDK_TOOLCHAIN/bin/armv7a-linux-androideabi21-clang
+export CXX=$NDK_TOOLCHAIN/bin/armv7a-linux-androideabi21-clang++
+export GOARCH=arm
+export GOARM=7
+BIN_FILENAME="dist/TorrServer-${GOOS}-${GOARCH}${GOARM}"
+echo "Android ${BIN_FILENAME}"
+${GOBIN} build -ldflags="${LDFLAGS}" -o ${BIN_FILENAME} main
+
+export CC=$NDK_TOOLCHAIN/bin/aarch64-linux-android21-clang
+export CXX=$NDK_TOOLCHAIN/bin/aarch64-linux-android21-clang++
+export GOARCH=arm64
+export GOARM=""
+BIN_FILENAME="dist/TorrServer-${GOOS}-${GOARCH}${GOARM}"
+echo "Android ${BIN_FILENAME}"
+${GOBIN} build -ldflags="${LDFLAGS}" -o ${BIN_FILENAME} main
+
+export CC=$NDK_TOOLCHAIN/bin/i686-linux-android21-clang
+export CXX=$NDK_TOOLCHAIN/bin/i686-linux-android21-clang++
+export GOARCH=386
+export GOARM=""
+BIN_FILENAME="dist/TorrServer-${GOOS}-${GOARCH}${GOARM}"
+echo "Android ${BIN_FILENAME}"
+${GOBIN} build -ldflags="${LDFLAGS}" -o ${BIN_FILENAME} main
+
+export CC=$NDK_TOOLCHAIN/bin/x86_64-linux-android21-clang
+export CXX=$NDK_TOOLCHAIN/bin/x86_64-linux-android21-clang++
+export GOARCH=amd64
+export GOARM=""
+BIN_FILENAME="dist/TorrServer-${GOOS}-${GOARCH}${GOARM}"
+echo "Android ${BIN_FILENAME}"
+${GOBIN} build -ldflags="${LDFLAGS}" -o ${BIN_FILENAME} main
