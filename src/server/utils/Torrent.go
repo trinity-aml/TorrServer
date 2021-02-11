@@ -3,13 +3,15 @@ package utils
 import (
 	"encoding/base32"
 	"errors"
+	"fmt"
+	"log"
+	"context"
 	"io/ioutil"
 	"math/rand"
+	"net"
 	"net/http"
 	"strings"
 	"time"
-
-	"server/settings"
 
 	"github.com/anacrolix/torrent"
 	"golang.org/x/time/rate"
@@ -103,14 +105,28 @@ func GotInfo(t *torrent.Torrent, timeout int) error {
 	}
 }
 
-func GetReadahead(piece_l int64) int64 {
-	readahead := int64(float64(settings.Get().CacheSize) * 0.33)
-	piece_q := int64(readahead/piece_l)
-	if piece_q < 4 {
-		piece_q = 4
+func DnsResolve(host string, serverDNS string) int {
+	addrs, err := net.LookupHost(host)
+	addr_dns := fmt.Sprintf("%s:53", serverDNS)
+	if len(addrs) == 0 {
+		log.Println("Check dns", addrs, err)
+		fn := func(ctx context.Context, network, address string) (net.Conn, error) {
+			d := net.Dialer{}
+			return d.DialContext(ctx, "udp", addr_dns)
+		}
+		net.DefaultResolver = &net.Resolver{
+			Dial: fn,
+		}
+		addrs, err = net.LookupHost(host)
+		log.Println("Check new dns", addrs, err)
+		if err == nil || len(addrs) > 0 {
+			return 1
+		} else {
+			return 0
+		}
+	} else {
+		return 2
 	}
-	readahead = piece_l * piece_q
-	return readahead
 }
 
 func Limit(i int) *rate.Limiter {

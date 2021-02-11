@@ -165,6 +165,22 @@ func (t *Torrent) watch() {
 		}
 	}
 }
+func (t *Torrent) getRA() int64 {
+	piece_l := t.cache.GetState().PiecesLength
+	adj := int64((int(t.cache.GetState().PiecesLength) * t.Torrent.Stats().ActivePeers) / (1 + t.cache.ReadersLen()))
+	switch {
+		case adj <= piece_l:
+			adj = piece_l
+		case adj > piece_l && adj <= piece_l*2:
+			adj = piece_l*2
+		case adj > piece_l*2 && adj <= piece_l*3:
+			adj = piece_l*3
+		case adj > piece_l*3:
+			adj = piece_l*4
+	}
+//	log.Println("Set readahead buffer:", adj)
+	return adj
+}
 
 func (t *Torrent) progressEvent() {
 	if t.expired() {
@@ -190,9 +206,10 @@ func (t *Torrent) progressEvent() {
 	}
 	t.muTorrent.Unlock()
 	t.lastTimeSpeed = time.Now()
-	
+
 	if (t.BytesReadUsefulData > settings.Get().PreloadBufferSize) {
-		t.cache.AdjustRA(utils.GetReadahead(int64(t.cache.GetState().PiecesLength)))
+		readahead := t.getRA()
+		t.cache.AdjustRA(readahead)
 	}
 }
 
@@ -233,7 +250,7 @@ func (t *Torrent) NewReader(file *torrent.File, readahead int64) *reader.Reader 
 	defer t.muReader.Unlock()
 	reader := reader.NewReader(file)
 	if readahead <= 0 {
-		readahead = utils.GetReadahead(int64(t.cache.GetState().PiecesLength))
+		readahead = t.cache.GetState().PiecesLength
 	}
 	reader.SetReadahead(readahead)
 	t.cache.AddReader(reader)
@@ -283,11 +300,11 @@ func (t *Torrent) Preload(file *torrent.File, size int64) {
 		}
 	}()
 
-	buff5mb := int64(5 * 1024 * 1024)
+	buff4mb := int64(4 * 1024 * 1024)
 	startPreloadLength := size
 	endPreloadOffset := int64(0)
-	if startPreloadLength > buff5mb {
-		endPreloadOffset = file.Offset() + file.Length() - buff5mb
+	if startPreloadLength > buff4mb {
+		endPreloadOffset = file.Offset() + file.Length() - buff4mb
 	}
 
 	readerPre := t.NewReader(file, startPreloadLength)
@@ -305,7 +322,7 @@ func (t *Torrent) Preload(file *torrent.File, size int64) {
 			return
 		}
 		readerPost.Seek(endPreloadOffset, io.SeekStart)
-		readerPost.SetReadahead(buff5mb)
+		readerPost.SetReadahead(buff4mb)
 		defer func() {
 			t.CloseReader(readerPost)
 			t.AddExpiredTime(time.Minute * 5)

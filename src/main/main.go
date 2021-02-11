@@ -11,6 +11,7 @@ import (
 	"github.com/alexflint/go-arg"
 	"server"
 	"server/settings"
+	"server/utils"
 	"server/version"
 )
 
@@ -41,6 +42,16 @@ func main() {
 
 	if params.Add != "" {
 		add()
+	}
+
+	ret := utils.DnsResolve("www.themoviedb.org","1.1.1.1")
+	switch {
+		case ret == 2:
+			fmt.Println("DNS resolver OK")
+		case ret == 1:
+			fmt.Println("New DNS resolver OK")
+		case ret == 0:
+			fmt.Println("New DNS resolver failed")
 	}
 
 	Preconfig(params.Kill)

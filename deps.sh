@@ -1,6 +1,7 @@
 #!/bin/bash
 
 export GOPATH="${PWD}"
+export GO111MODULE="off"
 
 go get -v github.com/alexflint/go-arg
 go get -v github.com/anacrolix/dht
