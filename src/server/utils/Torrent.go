@@ -4,7 +4,6 @@ import (
 	"encoding/base32"
 	"errors"
 	"fmt"
-	"log"
 	"context"
 	"io/ioutil"
 	"math/rand"
@@ -105,11 +104,12 @@ func GotInfo(t *torrent.Torrent, timeout int) error {
 	}
 }
 
-func DnsResolve(host string, serverDNS string) int {
+func DnsResolve(host string, serverDNS string) (int, string)  {
 	addrs, err := net.LookupHost(host)
 	addr_dns := fmt.Sprintf("%s:53", serverDNS)
+	a := 2
 	if len(addrs) == 0 {
-		log.Println("Check dns", addrs, err)
+		fmt.Println("Check dns", addrs, err)
 		fn := func(ctx context.Context, network, address string) (net.Conn, error) {
 			d := net.Dialer{}
 			return d.DialContext(ctx, "udp", addr_dns)
@@ -118,15 +118,17 @@ func DnsResolve(host string, serverDNS string) int {
 			Dial: fn,
 		}
 		addrs, err = net.LookupHost(host)
-		log.Println("Check new dns", addrs, err)
+		fmt.Println("Check new dns", addrs, err)
 		if err == nil || len(addrs) > 0 {
-			return 1
+			a = 1
 		} else {
-			return 0
+			a = 0
 		}
 	} else {
-		return 2
+		a = 2
 	}
+	b := fmt.Sprintf("Check dns: %s %s %s", host, addrs, err)
+	return a,b
 }
 
 func Limit(i int) *rate.Limiter {

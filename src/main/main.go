@@ -44,7 +44,8 @@ func main() {
 		add()
 	}
 
-	ret := utils.DnsResolve("www.themoviedb.org","1.1.1.1")
+	ret,str := utils.DnsResolve("www.themoviedb.org","1.1.1.1")
+	fmt.Println(str)
 	switch {
 		case ret == 2:
 			fmt.Println("DNS resolver OK")
