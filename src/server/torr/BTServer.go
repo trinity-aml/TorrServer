@@ -5,6 +5,7 @@ import (
 	"io"
 	"sync"
 	"time"
+	"math"
 	"math/rand"
 	"net"
 	
@@ -65,8 +66,15 @@ func (bt *BTServer) Reconnect() error {
 }
 
 func (bt *BTServer) configure() {
+	NewCache := (math.Round(float64(settings.Get().CacheSize) / float64(16*1024*1024))) * 16 * 1024 * 1024
+	settings.Get().CacheSize = int64(NewCache)
+	NewPreload := (math.Round(float64(settings.Get().PreloadBufferSize) / float64(16*1024*1024))) * 16 * 1024 * 1024
+	if NewPreload < 20 * 1024 * 1024 {
+		NewPreload = 32 * 1024 * 1024
+	}
+	settings.Get().PreloadBufferSize = int64(NewPreload)
 	bt.storage = memcache.NewStorage(settings.Get().CacheSize)
-
+	
 	//blocklist, _ := iplist.MMapPackedFile(filepath.Join(settings.Path, "blocklist"))
 	blocklist, _ := utils.ReadBlockedIP()
 
@@ -152,6 +160,7 @@ func (bt *BTServer) configure() {
 			}
 		}
 	}
+	
 	log.Println("Configure client:", settings.Get())
 }
 

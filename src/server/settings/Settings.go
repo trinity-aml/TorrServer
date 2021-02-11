@@ -4,7 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"time"
-
+	"math"
+	
 	bolt "go.etcd.io/bbolt"
 )
 
@@ -106,6 +107,14 @@ func ReadSettings() error {
 	if sets.TorrentDisconnectTimeout < 1 {
 		sets.TorrentDisconnectTimeout = 1
 	}
+	NewCache := (math.Round(float64(sets.CacheSize) / float64(16*1024*1024))) * 16 * 1024 * 1024
+	sets.CacheSize = int64(NewCache)
+	NewPreload := (math.Round(float64(sets.PreloadBufferSize) / float64(16*1024*1024))) * 16 * 1024 * 1024
+	if NewPreload < 20 * 1024 * 1024 {
+		NewPreload = 32 * 1024 * 1024
+	}
+	sets.PreloadBufferSize = int64(NewPreload)
+
 	return nil
 }
 
