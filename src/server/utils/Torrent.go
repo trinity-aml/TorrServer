@@ -17,7 +17,7 @@ import (
 )
 
 var defTrackers = []string{
-	"http://retracker.local",
+	"http://retracker.local/announce",
 
 	"http://bt4.t-ru.org/ann?magnet",
 	"http://retracker.mgts.by:80/announce",
@@ -25,33 +25,42 @@ var defTrackers = []string{
 	"http://tracker.electro-torrent.pl:80/announce",
 	"http://tracker.internetwarriors.net:1337/announce",
 	"http://tracker2.itzmx.com:6961/announce",
-	"udp4://46.148.18.250:2710",
-	"udp://opentor.org:2710",
+	"udp://46.148.18.250:2710",
+	"udp://[2001:67c:28f8:92::1111:1]:2710",
+	"udp://opentor.org:2710/announce",
 	"udp://public.popcorn-tracker.org:6969/announce",
 	"udp://tracker.opentrackr.org:1337/announce",
+	"http://tracker.filetracker.pl:8089/announce",
+	"http://tracker2.wasabii.com.tw:6969/announce",
+	"http://tracker.grepler.com:6969/announce",
+	"http://tracker.tiny-vps.com:6969/announce",
+	"http://tracker.dler.org:6969/announce",
+	"udp://ipv6.leechers-paradise.org:6969",
 
 	"http://bt.svao-ix.ru/announce",
 
 	"udp://explodie.org:6969/announce",
 
 	//https://github.com/ngosang/trackerslist/blob/master/trackers_best_ip.txt 01.02.2020
-	"udp://151.80.120.112:2710/announce",
 	"udp://93.158.213.92:1337/announce",
-	"udp://138.255.103.83:1337/announce",
-	"udp://194.182.165.153:6969/announce",
+	"http://138.255.103.83:1337/announce",
 	"udp://208.83.20.20:6969/announce",
 	"udp://184.105.151.164:6969/announce",
-	"udp://79.111.118.59:60889/announce",
-	"http://93.157.234.32:60889/announce",
 	"udp://51.81.46.170:6969/announce",
 	"udp://51.68.199.47:6969/announce",
-	"udp://5.206.60.196:6969/announce",
+	"http://54.37.106.164:80/announce",
 	"udp://185.181.60.67:80/announce",
+	"udp://5.226.148.20:6969/announce",
 	"udp://91.216.110.52:451/announce",
 	"udp://89.234.156.205:451/announce",
-	"udp://5.226.148.20:6969/announce",
 	"udp://37.235.174.46:2710/announce",
+	"http://78.30.254.12:2710/announce",
 	"udp://138.201.150.56:6969/announce",
+	"udp://168.119.237.9:6969/announce",
+	"udp://51.15.40.114:80/announce",
+	"http://195.201.31.194:80/announce",
+	"udp://46.148.18.250:2710/announce",
+	"udp://46.148.18.254:2710/announce",
 }
 
 var loadedTrackers []string
