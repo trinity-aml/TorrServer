@@ -41,7 +41,7 @@ var defTrackers = []string{
 
 	"udp://explodie.org:6969/announce",
 
-	//https://github.com/ngosang/trackerslist/blob/master/trackers_best_ip.txt 01.02.2020
+	//https://github.com/ngosang/trackerslist/blob/master/trackers_best_ip.txt 13.02.2020
 	"udp://93.158.213.92:1337/announce",
 	"http://138.255.103.83:1337/announce",
 	"udp://208.83.20.20:6969/announce",

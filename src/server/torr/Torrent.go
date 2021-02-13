@@ -300,11 +300,11 @@ func (t *Torrent) Preload(file *torrent.File, size int64) {
 		}
 	}()
 
-	buff4mb := int64(4 * 1024 * 1024)
+	buffmb := int64(t.cache.GetState().PiecesLength)
 	startPreloadLength := size
 	endPreloadOffset := int64(0)
-	if startPreloadLength > buff4mb {
-		endPreloadOffset = file.Offset() + file.Length() - buff4mb
+	if startPreloadLength > buffmb {
+		endPreloadOffset = file.Offset() + file.Length() - buffmb
 	}
 
 	readerPre := t.NewReader(file, startPreloadLength)
@@ -322,7 +322,7 @@ func (t *Torrent) Preload(file *torrent.File, size int64) {
 			return
 		}
 		readerPost.Seek(endPreloadOffset, io.SeekStart)
-		readerPost.SetReadahead(buff4mb)
+		readerPost.SetReadahead(buffmb)
 		defer func() {
 			t.CloseReader(readerPost)
 			t.AddExpiredTime(time.Minute * 5)
