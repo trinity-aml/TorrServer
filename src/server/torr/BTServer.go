@@ -69,7 +69,7 @@ func (bt *BTServer) configure() {
 	NewCache := (math.Round(float64(settings.Get().CacheSize) / float64(16*1024*1024))) * 16 * 1024 * 1024
 	settings.Get().CacheSize = int64(NewCache)
 	NewPreload := (math.Round(float64(settings.Get().PreloadBufferSize) / float64(16*1024*1024))) * 16 * 1024 * 1024
-	if NewPreload < 20 * 1024 * 1024 {
+	if NewPreload < 32 * 1024 * 1024 {
 		NewPreload = 32 * 1024 * 1024
 	}
 	settings.Get().PreloadBufferSize = int64(NewPreload)
@@ -113,6 +113,7 @@ func (bt *BTServer) configure() {
 	} else {
 		Timeout := settings.Get().TimeStrategy
 		bt.config.DefaultRequestStrategy = torrent.RequestStrategyDuplicateRequestTimeout(Timeout * time.Second)
+		bt.config.DisableAcceptRateLimiting = true
 	}
 	if settings.Get().DhtConnectionLimit > 0 {
 		bt.config.ConnTracker.SetMaxEntries(settings.Get().DhtConnectionLimit)
@@ -133,7 +134,7 @@ func (bt *BTServer) configure() {
 	}
 	if settings.Get().PeersListenPort > 0 {
 		bt.config.ListenPort = settings.Get().PeersListenPort
-	} else if settings.Get().PeersListenPort == 0 {
+	} else if settings.Get().PeersListenPort <= 0 {
 		if settings.Get().DisableUPNP == true {
 			bt.config.NoDefaultPortForwarding = false
 			settings.Get().DisableUPNP = false

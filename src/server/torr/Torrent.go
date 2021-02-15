@@ -301,6 +301,9 @@ func (t *Torrent) Preload(file *torrent.File, size int64) {
 	}()
 
 	buffmb := int64(t.cache.GetState().PiecesLength)
+	if buffmb < 4*1024*1024 {
+		buffmb = 4*1024*1024
+	}
 	startPreloadLength := size
 	endPreloadOffset := int64(0)
 	if startPreloadLength > buffmb {

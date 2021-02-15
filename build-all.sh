@@ -26,7 +26,7 @@ export GOPATH="${PWD}"
 GOBIN="/usr/local/go/bin/go"
 export GO111MODULE="off"
 
-#sudo GO111MODULE="off" $GOBIN clean -i -r -x -cache
+sudo GO111MODULE="off" $GOBIN clean -i -r -x -cache
 
 $GOBIN version
 

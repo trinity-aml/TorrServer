@@ -16,9 +16,9 @@ var (
 
 func init() {
 	sets = new(Settings)
-	sets.CacheSize = 200 * 1024 * 1024
+	sets.CacheSize = 208 * 1024 * 1024
 	sets.EnableDebug = false
-	sets.PreloadBufferSize = 20 * 1024 * 1024
+	sets.PreloadBufferSize = 32 * 1024 * 1024
 	sets.ConnectionsLimit = 20
 	sets.DhtConnectionLimit = 500
 	sets.RetrackersMode = 1
@@ -100,8 +100,8 @@ func ReadSettings() error {
 	if sets.DhtConnectionLimit < 0 {
 		sets.DhtConnectionLimit = 500
 	}
-	if sets.CacheSize < 0 {
-		sets.CacheSize = 200 * 1024 * 1024
+	if sets.CacheSize <= 0 {
+		sets.CacheSize = 208 * 1024 * 1024
 	}
 
 	if sets.TorrentDisconnectTimeout < 1 {
@@ -110,7 +110,7 @@ func ReadSettings() error {
 	NewCache := (math.Round(float64(sets.CacheSize) / float64(16*1024*1024))) * 16 * 1024 * 1024
 	sets.CacheSize = int64(NewCache)
 	NewPreload := (math.Round(float64(sets.PreloadBufferSize) / float64(16*1024*1024))) * 16 * 1024 * 1024
-	if NewPreload < 20 * 1024 * 1024 {
+	if NewPreload < 32 * 1024 * 1024 {
 		NewPreload = 32 * 1024 * 1024
 	}
 	sets.PreloadBufferSize = int64(NewPreload)
