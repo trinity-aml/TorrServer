@@ -91,9 +91,9 @@ func (bt *BTServer) configure() {
 	bt.config.NoDefaultPortForwarding = settings.Get().DisableUPNP
 	bt.config.NoDHT = settings.Get().DisableDHT
 	bt.config.NoUpload = settings.Get().DisableUpload
-	bt.config.DropMutuallyCompletePeers = settings.Get().DropPeers
-	bt.config.DropDuplicatePeerIds = settings.Get().DropIds
-	bt.config.DisableAcceptRateLimiting = settings.Get().DisableLimiting
+	bt.config.DropMutuallyCompletePeers = true
+	bt.config.DropDuplicatePeerIds = true
+	bt.config.DisableAcceptRateLimiting = false
 	bt.config.HeaderObfuscationPolicy = torrent.HeaderObfuscationPolicy {
 		RequirePreferred: settings.Get().Encryption == 2, // Whether the value of Preferred is a strict requirement
 		Preferred: settings.Get().Encryption != 1, // Whether header obfuscation is preferred
@@ -119,13 +119,26 @@ func (bt *BTServer) configure() {
 		bt.config.ConnTracker.SetMaxEntries(settings.Get().DhtConnectionLimit)
 	} else if settings.Get().DhtConnectionLimit == 0 {
 		if !settings.Get().DisableDHT {
-			bt.config.TorrentPeersHighWater = 3000
+			bt.config.TorrentPeersHighWater = 500
 		}
 	}
 	if !settings.Get().DisableDHT {
-		bt.config.TorrentPeersLowWater = settings.Get().ConnectionsLimit
+		if settings.Get().ConnectionsLimit <= 20 {
+			bt.config.TorrentPeersLowWater = settings.Get().ConnectionsLimit
+		} else {
+			bt.config.TorrentPeersLowWater = 50
+		}
 	}
-	bt.config.HalfOpenConnsPerTorrent = int(float64(settings.Get().ConnectionsLimit)*0.5)
+	if int(float64(settings.Get().ConnectionsLimit)*0.5) <= 25 {
+		bt.config.HalfOpenConnsPerTorrent = int(float64(settings.Get().ConnectionsLimit)*0.5)
+	} else {
+		bt.config.HalfOpenConnsPerTorrent = 25
+	}
+	if int(float64(settings.Get().ConnectionsLimit)*2) <= 100 {
+		bt.config.TotalHalfOpenConns = int(float64(settings.Get().ConnectionsLimit)*2)
+	} else {
+		bt.config.TotalHalfOpenConns = 100
+	}
 	if settings.Get().DownloadRateLimit > 0 {
 		bt.config.DownloadRateLimiter = utils.Limit(settings.Get().DownloadRateLimit * 1024)
 	}

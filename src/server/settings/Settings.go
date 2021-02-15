@@ -25,9 +25,6 @@ func init() {
 	sets.TorrentDisconnectTimeout = 30
 	sets.ChooseStrategy = 0
 	sets.TimeStrategy = 5
-	sets.DropPeers = true
-	sets.DropIds = true
-	sets.DisableLimiting = false
 	StartTime = time.Now()
 }
 
@@ -50,9 +47,6 @@ type Settings struct {
 	DisableDHT         bool
 	DisableUpload      bool
 	ReadOnlyMode       bool
-	DropPeers          bool
-	DropIds            bool
-	DisableLimiting    bool
 	Encryption         int // 0 - Enable, 1 - disable, 2 - force
 	DownloadRateLimit  int // in kb, 0 - inf
 	UploadRateLimit    int // in kb, 0 - inf

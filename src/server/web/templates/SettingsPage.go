@@ -91,26 +91,6 @@ var settingsPage = `
                 <label for="EnableDebug">Режим отладки (только для разработчиков)</label>
             </div>
 		<br>
-			<small class="form-text text-muted">Тонкие (экспериментальные) настройки торрентов</small>
-            <div class="form-check">
-                <input id="DropPeers" class="form-check-input" type="checkbox" autocomplete="off">
-                <label for="DropPeers">DropMutuallyCompletePeers</label>
-            </div>
-			<div class="form-check">
-			    <input id="DropIds" class="form-check-input" type="checkbox" autocomplete="off">
-                <label for="DropIds">DropDuplicatePeerIds</label>
-            </div>
-            <div class="form-check">
-			    <input id="DisableLimiting" class="form-check-input" type="checkbox" autocomplete="off">
-                <label for="DisableLimiting">DisableAcceptRateLimiting</label>
-            </div>
-			<div class="input-group">
-                <div class="input-group-prepend">
-                    <div class="input-group-text">Таймаут стратегии по-дефолту</div>
-                </div>
-                <input id="TimeStrategy" class="form-control" type="number" autocomplete="off">
-            </div>
-		<br>
             <div class="input-group">
                 <div class="input-group-prepend">
                     <div class="input-group-text">Шифрование</div>
@@ -131,6 +111,12 @@ var settingsPage = `
                     <option value="1">Fastest</option>
                     <option value="2">Fuzzing</option>
                 </select>
+            </div>
+			<div class="input-group">
+                <div class="input-group-prepend">
+                    <div class="input-group-text">Таймаут стратегии "по-умолчанию"</div>
+                </div>
+                <input id="TimeStrategy" class="form-control" type="number" autocomplete="off">
             </div>
 		<br>
             <div class="input-group">
@@ -208,9 +194,6 @@ var settingsPage = `
 			data.DisableUPNP = $('#DisableUPNP').prop('checked');
 			data.DisableDHT = $('#DisableDHT').prop('checked');
 			data.DisableUpload = $('#DisableUpload').prop('checked');
-			data.DropPeers = $('#DropPeers').prop('checked');
-			data.DropIds = $('#DropIds').prop('checked');
-			data.DisableLimiting = $('#DisableLimiting').prop('checked');
 			data.EnableDebug = $('#EnableDebug').prop('checked');
 			data.Encryption = Number($('#Encryption').val());
 			data.ChooseStrategy = Number($('#ChooseStrategy').val());
@@ -248,9 +231,6 @@ var settingsPage = `
 					$('#DisableUPNP').prop('checked', data.DisableUPNP);
 					$('#DisableDHT').prop('checked', data.DisableDHT);
 					$('#DisableUpload').prop('checked', data.DisableUpload);
-					$('#DropPeers').prop('checked', data.DropPeers);
-					$('#DropIds').prop('checked', data.DropIds);
-					$('#DisableLimiting').prop('checked', data.DisableLimiting);
 					$('#EnableDebug').prop('checked', data.EnableDebug);
 					$('#Encryption').val(data.Encryption);
 					$('#ChooseStrategy').val(data.ChooseStrategy);
@@ -269,7 +249,7 @@ var settingsPage = `
         $(document).ready(function() {
             refreshSettings();
 			navigator.registerProtocolHandler("magnet",
-                             	"http://localhost:8090/torrent/play?link=%s&save=true&stat=true",
+                             	"http://localhost:8091/torrent/play?link=%s&save=true&stat=true",
                                 "TorrServer");
         });
 
