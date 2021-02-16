@@ -37,7 +37,7 @@ func main() {
 	}
 
 	if params.Port == "" {
-		params.Port = "8090"
+		params.Port = "8091"
 	}
 
 	if params.Add != "" {
