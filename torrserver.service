@@ -1,10 +1,17 @@
 [Unit]
-Description=TorrServer
+Description = torrserver
+After = network.target
 
 [Service]
-Type=simple
-ExecStart=/bin/torrserver
+User = root
+Group = root
+Type = simple
+NonBlocking = true
+ExecStart = /storage/torrserver/TorrServer-linux-arm64 -d /storage/torrserver/ -k -p 8091
+WorkingDirectory = /storage/torrserver
+#Restart = on-abort
+Restart = always
+RestartSec = 5s
 
 [Install]
-WantedBy=multi-user.target
-
+WantedBy = multi-user.target
