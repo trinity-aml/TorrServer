@@ -253,6 +253,7 @@ func (t *Torrent) NewReader(file *torrent.File, readahead int64) *reader.Reader 
 		readahead = t.cache.GetState().PiecesLength
 	}
 	reader.SetReadahead(readahead)
+	reader.SetResponsive()
 	t.cache.AddReader(reader)
 	return reader
 }

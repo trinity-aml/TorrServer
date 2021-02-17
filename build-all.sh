@@ -24,9 +24,9 @@ type setopt >/dev/null 2>&1
 
 export GOPATH="${PWD}"
 GOBIN="/usr/local/go/bin/go"
-export GO111MODULE="off"
+export GO111MODULE="auto"
 
-#sudo GO111MODULE="off" $GOBIN clean -i -r -x -cache
+#sudo GO111MODULE="auto" $GOBIN clean -i -r -x -cache
 
 $GOBIN version
 

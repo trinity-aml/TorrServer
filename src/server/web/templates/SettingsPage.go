@@ -119,6 +119,16 @@ var settingsPage = `
                 <input id="TimeStrategy" class="form-control" type="number" autocomplete="off">
             </div>
 		<br>
+		    <div class="input-group">
+                <div class="input-group-prepend">
+                    <div class="input-group-text">Источник ретрекеров</div>
+                </div>
+                <select id="ChooseTrackers" class="form-control">
+                    <option value="0">ngosang list of trackers</option>
+                    <option value="1">newtrackon.com list of trackers</option>
+                </select>
+            </div>
+		<br>
             <div class="input-group">
                 <div class="input-group-prepend">
                     <div class="input-group-text">Порт для входящих торрент подключений</div>
@@ -197,7 +207,8 @@ var settingsPage = `
 			data.EnableDebug = $('#EnableDebug').prop('checked');
 			data.Encryption = Number($('#Encryption').val());
 			data.ChooseStrategy = Number($('#ChooseStrategy').val());
- 
+			data.ChooseTrackers = Number($('#ChooseTrackers').val());
+			
 			data.ConnectionsLimit = Number($('#ConnectionsLimit').val());
 			data.DhtConnectionLimit = Number($('#DhtConnectionLimit').val());
  
@@ -234,7 +245,8 @@ var settingsPage = `
 					$('#EnableDebug').prop('checked', data.EnableDebug);
 					$('#Encryption').val(data.Encryption);
 					$('#ChooseStrategy').val(data.ChooseStrategy);
-
+					$('#ChooseTrackers').val(data.ChooseTrackers);
+					
          			$('#ConnectionsLimit').val(data.ConnectionsLimit);
          			$('#DhtConnectionLimit').val(data.DhtConnectionLimit);
          

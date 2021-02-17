@@ -25,6 +25,7 @@ func init() {
 	sets.TorrentDisconnectTimeout = 30
 	sets.ChooseStrategy = 0
 	sets.TimeStrategy = 5
+	sets.ChooseTrackers = 0
 	StartTime = time.Now()
 }
 
@@ -37,6 +38,8 @@ type Settings struct {
 	ChooseStrategy int //0 - default speed strategy (balanced), 1 - fast, 2 - fuzzing
 	
 	TimeStrategy time.Duration //5 - default timeout for default strategy
+	
+	ChooseTrackers int //0 - ngosang list of trackers, 1 - https://newtrackon.com
 	
 	//BT Config
 	EnableIPv6         bool
