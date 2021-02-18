@@ -91,7 +91,7 @@ func (bt *BTServer) configure() {
 	bt.config.NoDefaultPortForwarding = settings.Get().DisableUPNP
 	bt.config.NoDHT = settings.Get().DisableDHT
 	bt.config.NoUpload = settings.Get().DisableUpload
-	bt.config.DropMutuallyCompletePeers = true
+	//bt.config.DropMutuallyCompletePeers = true
 	bt.config.DropDuplicatePeerIds = true
 	bt.config.DisableAcceptRateLimiting = false
 	bt.config.HeaderObfuscationPolicy = torrent.HeaderObfuscationPolicy {

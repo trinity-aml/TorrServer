@@ -25,8 +25,6 @@ var defTrackers = []string {
 	"http://tracker.electro-torrent.pl:80/announce",
 	"http://tracker.internetwarriors.net:1337/announce",
 	"http://tracker2.itzmx.com:6961/announce",
-	"udp://46.148.18.250:2710",
-	"udp://[2001:67c:28f8:92::1111:1]:2710",
 	"udp://opentor.org:2710/announce",
 	"udp://public.popcorn-tracker.org:6969/announce",
 	"udp://tracker.opentrackr.org:1337/announce",
@@ -40,37 +38,12 @@ var defTrackers = []string {
 	"udp://explodie.org:6969/announce",
 }
 
-//https://github.com/ngosang/trackerslist/blob/master/trackers_best_ip.txt 17.02.2020
-var defTrackersIP = []string {
-	"udp://93.158.213.92:1337/announce",
-	"udp://138.255.103.83:1337/announce",
-	"udp://193.218.118.220:6969/announce",
-	"udp://51.81.46.170:6969/announce",
-	"udp://184.105.151.164:6969/announce",
-	"udp://51.68.199.47:6969/announce",
-	"http://54.37.106.164:80/announce",
-	"udp://5.206.49.194:6969/announce",
-	"udp://185.181.60.67:80/announce",
-	"udp://91.216.110.52:451/announce",
-	"udp://5.226.148.20:6969/announce",
-	"udp://37.235.174.46:2710/announce",
-	"udp://51.15.71.71:6969/announce",
-	"udp://168.119.237.9:6969/announce",
-	"udp://51.15.40.114:80/announce",
-	"http://195.201.31.194:80/announce",
-	"udp://46.148.18.250:2710/announce",
-	"udp://46.148.18.254:2710/announce",
-}
-
 var loadedTrackers []string
 
 func GetDefTrackers() []string {
 	var hosts []string
 	if settings.Get().ChooseTrackers == 0 {
-		hosts = []string {
-			"https://raw.githubusercontent.com/ngosang/trackerslist/master/trackers_best.txt",
-			"https://raw.githubusercontent.com/ngosang/trackerslist/master/trackers_best_ip.txt",
-		}
+		hosts = []string {"https://raw.githubusercontent.com/ngosang/trackerslist/master/trackers_best_ip.txt"}
 		fmt.Println("Load ngosang announcers\n")
 	} else if settings.Get().ChooseTrackers == 1 {
 		hosts = []string {"https://newtrackon.com/api/stable"}
@@ -80,13 +53,10 @@ func GetDefTrackers() []string {
 		loadNewTracker(ip)
 	}
 	if len(loadedTrackers) == 0 {
-		defTrackers = append(defTrackers, defTrackersIP...)
-//		fmt.Println("Loaded built-in announcers list\n", defTrackers)
 		fmt.Println("Load external announcers failed\n")
 		fmt.Println("Loaded built-in announcers list\n")
 		return defTrackers
 	} else {
-//		fmt.Println("Load external announcers successed\n", loadedTrackers)
 		fmt.Println("Load external announcers successed\n")
 		return loadedTrackers
 	}

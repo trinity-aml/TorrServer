@@ -14,7 +14,7 @@ func Start(settingsPath, port string) {
 		fmt.Println("Error read settings:", err)
 	}
 	if port == "" {
-		port = "8090"
+		port = "8091"
 	}
 	server.Start(port)
 }
