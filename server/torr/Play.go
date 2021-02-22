@@ -10,9 +10,9 @@ import (
 
 	"log"
 
-	"github.com/anacrolix/missinggo/httptoo"
+	"github.com/anacrolix/missinggo/v2/httptoo"
 	"github.com/anacrolix/torrent"
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 )
 
 func (bt *BTServer) View(torr *Torrent, file *torrent.File, c echo.Context) error {

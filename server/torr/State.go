@@ -1,7 +1,7 @@
 package torr
 
 import (
-	"github.com/anacrolix/dht"
+	"github.com/anacrolix/dht/v2"
 )
 
 type BTState struct {

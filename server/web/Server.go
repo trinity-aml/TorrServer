@@ -16,8 +16,8 @@ import (
 	"server/web/mods"
 	"server/web/templates"
 
-	"github.com/labstack/echo"
-	"github.com/labstack/echo/middleware"
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
 var (

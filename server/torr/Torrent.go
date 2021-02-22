@@ -169,16 +169,16 @@ func (t *Torrent) getRA() int64 {
 	piece_l := t.cache.GetState().PiecesLength
 	adj := int64((int(t.cache.GetState().PiecesLength) * t.Torrent.Stats().ActivePeers) / (1 + t.cache.ReadersLen()))
 	switch {
-		case adj <= piece_l:
-			adj = piece_l
-		case adj > piece_l && adj <= piece_l*2:
-			adj = piece_l*2
-		case adj > piece_l*2 && adj <= piece_l*3:
-			adj = piece_l*3
-		case adj > piece_l*3:
-			adj = piece_l*4
+	case adj <= piece_l:
+		adj = piece_l
+	case adj > piece_l && adj <= piece_l*2:
+		adj = piece_l * 2
+	case adj > piece_l*2 && adj <= piece_l*3:
+		adj = piece_l * 3
+	case adj > piece_l*3:
+		adj = piece_l * 4
 	}
-//	log.Println("Set readahead buffer:", adj)
+	//	log.Println("Set readahead buffer:", adj)
 	return adj
 }
 
@@ -207,7 +207,7 @@ func (t *Torrent) progressEvent() {
 	t.muTorrent.Unlock()
 	t.lastTimeSpeed = time.Now()
 
-	if (t.BytesReadUsefulData > settings.Get().PreloadBufferSize) {
+	if t.BytesReadUsefulData > settings.Get().PreloadBufferSize {
 		readahead := t.getRA()
 		t.cache.AdjustRA(readahead)
 	}
@@ -253,7 +253,6 @@ func (t *Torrent) NewReader(file *torrent.File, readahead int64) *reader.Reader 
 		readahead = t.cache.GetState().PiecesLength
 	}
 	reader.SetReadahead(readahead)
-	reader.SetResponsive()
 	t.cache.AddReader(reader)
 	return reader
 }
@@ -301,10 +300,7 @@ func (t *Torrent) Preload(file *torrent.File, size int64) {
 		}
 	}()
 
-	buffmb := int64(t.cache.GetState().PiecesLength)
-	if buffmb < 4*1024*1024 {
-		buffmb = 4*1024*1024
-	}
+	buffmb := int64(4 * 1024 * 1024)
 	startPreloadLength := size
 	endPreloadOffset := int64(0)
 	if startPreloadLength > buffmb {

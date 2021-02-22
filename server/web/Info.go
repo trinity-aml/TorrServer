@@ -8,7 +8,7 @@ import (
 	"server/utils"
 
 	"github.com/anacrolix/torrent/metainfo"
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 	"github.com/labstack/gommon/bytes"
 )
 

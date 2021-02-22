@@ -9,7 +9,7 @@ PLATFORMS="$PLATFORMS linux/mips linux/mipsle linux/mips64 linux/mips64le"
 
 type setopt >/dev/null 2>&1
 
-GOBIN="/usr/local/go/bin/go"
+GOBIN="go"
 
 $GOBIN version
 
@@ -18,17 +18,17 @@ FAILURES=""
 ROOT=${PWD}
 OUTPUT="${ROOT}/dist/TorrServer"
 
+#$GOBIN clean -i -r -cache
+rm -fr "${ROOT}/dist"
 cd "${ROOT}/server"
-$GOBIN clean -i -r -cache
-#rm -f "${OUTPUT}*"
 
 $GOBIN mod tidy
 
-#BUILD_FLAGS="-tags disable_libutp -ldflags=${LDFLAGS}"
+BUILD_FLAGS="-tags disable_libutp -ldflags=${LDFLAGS}"
 
-#####################################
-### ARM build section
-#####
+################################################
+### ARM build section                        ###
+################################################
 
 GOOS="linux"
 GOARCH="arm64"
@@ -44,9 +44,9 @@ CMD="GOOS=${GOOS} GOARCH=${GOARCH} GOARM=${GOARM} ${GOBIN} build ${BUILD_FLAGS} 
 echo "${CMD}"
 eval "${CMD}" || FAILURES="${FAILURES} ${GOOS}/${GOARCH}${GOARM}"
 
-#####################################
-### X86 build section
-#####
+################################################
+### X86, darwin, freebsd, mips build section ###
+################################################
 
 for PLATFORM in $PLATFORMS; do
   GOOS=${PLATFORM%/*}

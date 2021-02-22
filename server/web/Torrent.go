@@ -17,9 +17,9 @@ import (
 	"server/utils"
 	"server/web/helpers"
 
-	"github.com/anacrolix/missinggo/httptoo"
+	"github.com/anacrolix/missinggo/v2/httptoo"
 	"github.com/anacrolix/torrent/metainfo"
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 )
 
 func initTorrent(e *echo.Echo) {
@@ -478,10 +478,10 @@ func torrentViewedRem(c echo.Context) error {
 }
 
 func torrentViewedList(c echo.Context) error {
-//	err = settings.List(jreq.Hash)
-//	if err != nil {
-//		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
-//	}
+	//	err = settings.List(jreq.Hash)
+	//	if err != nil {
+	//		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	//	}
 	return c.NoContent(http.StatusOK)
 }
 
@@ -514,8 +514,8 @@ func torrentPlay(c echo.Context) error {
 	if link == "" {
 		return echo.NewHTTPError(http.StatusBadRequest, "link should not be empty")
 	}
-	if (settings.Get().EnableDebug) {
-	    fmt.Println("Play:", c.QueryParams()) // mute log flood on play
+	if settings.Get().EnableDebug {
+		fmt.Println("Play:", c.QueryParams()) // mute log flood on play
 	}
 	qsave := c.QueryParam("save")
 	qpreload := c.QueryParam("preload")
@@ -673,7 +673,7 @@ func getTorrentJS(tor *settings.Torrent) (*TorrentJsonResponse, error) {
 		js.Name = mag.DisplayName
 	}
 	mag.Trackers = []string{} // remove retrackers for small link size
-	mag.DisplayName = "" // clear dn from link - long query params may fail in QueryParam("link")
+	mag.DisplayName = ""      // clear dn from link - long query params may fail in QueryParam("link")
 	js.Magnet = tor.Magnet
 	js.Hash = tor.Hash
 	js.AddTime = tor.Timestamp

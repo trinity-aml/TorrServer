@@ -1,7 +1,7 @@
 package mods
 
 import (
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 )
 
 func InitMods(e *echo.Echo) {

@@ -8,7 +8,7 @@ import (
 	"server/torr/storage"
 	"server/torr/storage/state"
 
-	"github.com/anacrolix/missinggo/filecache"
+	"github.com/anacrolix/missinggo/v2/filecache"
 	"github.com/anacrolix/torrent/metainfo"
 	storage2 "github.com/anacrolix/torrent/storage"
 )
