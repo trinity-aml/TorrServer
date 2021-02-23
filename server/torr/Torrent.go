@@ -3,6 +3,7 @@ package torr
 import (
 	"io"
 	"log"
+	"math"
 	"sort"
 	"sync"
 	"time"
@@ -167,18 +168,13 @@ func (t *Torrent) watch() {
 }
 func (t *Torrent) getRA() int64 {
 	piece_l := t.cache.GetState().PiecesLength
-	adj := int64((int(t.cache.GetState().PiecesLength) * t.Torrent.Stats().ActivePeers) / (1 + t.cache.ReadersLen()))
-	switch {
-	case adj <= piece_l:
-		adj = piece_l
-	case adj > piece_l && adj <= piece_l*2:
-		adj = piece_l * 2
-	case adj > piece_l*2 && adj <= piece_l*3:
-		adj = piece_l * 3
-	case adj > piece_l*3:
-		adj = piece_l * 4
+	adj := int64((int(piece_l) * t.Torrent.Stats().ActivePeers) / (1 + t.cache.ReadersLen()))
+	adj = int64((math.Round(float64(adj) / float64(piece_l))) * float64(piece_l))
+	maxAdj := int64(math.Round(float64(settings.Get().CacheSize)*0.33)/float64(piece_l)) * piece_l
+	if adj > maxAdj {
+		adj = maxAdj
 	}
-	//	log.Println("Set readahead buffer:", adj)
+	//log.Println("Set readahead buffer:", adj)
 	return adj
 }
 
@@ -250,7 +246,7 @@ func (t *Torrent) NewReader(file *torrent.File, readahead int64) *reader.Reader 
 	defer t.muReader.Unlock()
 	reader := reader.NewReader(file)
 	if readahead <= 0 {
-		readahead = t.cache.GetState().PiecesLength
+		readahead = t.cache.GetState().PiecesLength * 2
 	}
 	reader.SetReadahead(readahead)
 	t.cache.AddReader(reader)

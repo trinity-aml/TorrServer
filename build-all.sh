@@ -18,10 +18,9 @@ FAILURES=""
 ROOT=${PWD}
 OUTPUT="${ROOT}/dist/TorrServer"
 
-#$GOBIN clean -i -r -cache
 rm -fr "${ROOT}/dist"
 cd "${ROOT}/server"
-
+#$GOBIN clean -i -r -cache
 $GOBIN mod tidy
 
 BUILD_FLAGS="-tags disable_libutp -ldflags=${LDFLAGS}"

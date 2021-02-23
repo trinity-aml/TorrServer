@@ -3,9 +3,9 @@ package settings
 import (
 	"encoding/json"
 	"fmt"
-	"time"
 	"math"
-	
+	"time"
+
 	bolt "go.etcd.io/bbolt"
 )
 
@@ -36,11 +36,11 @@ type Settings struct {
 	RetrackersMode int //0 - don`t add, 1 - add retrackers, 2 - remove retrackers
 
 	ChooseStrategy int //0 - default speed strategy (balanced), 1 - fast, 2 - fuzzing
-	
+
 	TimeStrategy time.Duration //5 - default timeout for default strategy
-	
+
 	ChooseTrackers int //0 - ngosang list of trackers, 1 - https://newtrackon.com
-	
+
 	//BT Config
 	EnableIPv6         bool
 	EnableDebug        bool
@@ -56,7 +56,7 @@ type Settings struct {
 	ConnectionsLimit   int
 	DhtConnectionLimit int // 0 - inf
 	PeersListenPort    int
-	
+
 	TorrentDisconnectTimeout int // in seconds
 }
 
@@ -107,7 +107,7 @@ func ReadSettings() error {
 	NewCache := (math.Round(float64(sets.CacheSize) / float64(16*1024*1024))) * 16 * 1024 * 1024
 	sets.CacheSize = int64(NewCache)
 	NewPreload := (math.Round(float64(sets.PreloadBufferSize) / float64(16*1024*1024))) * 16 * 1024 * 1024
-	if NewPreload < 32 * 1024 * 1024 {
+	if NewPreload < 32*1024*1024 {
 		NewPreload = 32 * 1024 * 1024
 	}
 	sets.PreloadBufferSize = int64(NewPreload)

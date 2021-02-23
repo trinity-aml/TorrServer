@@ -3,12 +3,12 @@ package torr
 import (
 	"fmt"
 	"io"
-	"sync"
-	"time"
 	"math"
 	"math/rand"
 	"net"
-	
+	"sync"
+	"time"
+
 	"server/settings"
 	"server/torr/storage/memcache"
 	"server/torr/storage/state"
@@ -69,12 +69,12 @@ func (bt *BTServer) configure() {
 	NewCache := (math.Round(float64(settings.Get().CacheSize) / float64(16*1024*1024))) * 16 * 1024 * 1024
 	settings.Get().CacheSize = int64(NewCache)
 	NewPreload := (math.Round(float64(settings.Get().PreloadBufferSize) / float64(16*1024*1024))) * 16 * 1024 * 1024
-	if NewPreload < 32 * 1024 * 1024 {
+	if NewPreload < 32*1024*1024 {
 		NewPreload = 32 * 1024 * 1024
 	}
 	settings.Get().PreloadBufferSize = int64(NewPreload)
 	bt.storage = memcache.NewStorage(settings.Get().CacheSize)
-	
+
 	//blocklist, _ := iplist.MMapPackedFile(filepath.Join(settings.Path, "blocklist"))
 	blocklist, _ := utils.ReadBlockedIP()
 
@@ -92,11 +92,11 @@ func (bt *BTServer) configure() {
 	bt.config.NoDHT = settings.Get().DisableDHT
 	bt.config.NoUpload = settings.Get().DisableUpload
 	//bt.config.DropMutuallyCompletePeers = true
-	bt.config.DropDuplicatePeerIds = true
-	bt.config.DisableAcceptRateLimiting = false
-	bt.config.HeaderObfuscationPolicy = torrent.HeaderObfuscationPolicy {
+	//bt.config.DropDuplicatePeerIds = true
+	//bt.config.DisableAcceptRateLimiting = false
+	bt.config.HeaderObfuscationPolicy = torrent.HeaderObfuscationPolicy{
 		RequirePreferred: settings.Get().Encryption == 2, // Whether the value of Preferred is a strict requirement
-		Preferred: settings.Get().Encryption != 1, // Whether header obfuscation is preferred
+		Preferred:        settings.Get().Encryption != 1, // Whether header obfuscation is preferred
 	}
 	bt.config.IPBlocklist = blocklist
 	bt.config.DefaultStorage = bt.storage
@@ -113,7 +113,7 @@ func (bt *BTServer) configure() {
 	} else {
 		Timeout := settings.Get().TimeStrategy
 		bt.config.DefaultRequestStrategy = torrent.RequestStrategyDuplicateRequestTimeout(Timeout * time.Second)
-		bt.config.DisableAcceptRateLimiting = true
+		//bt.config.DisableAcceptRateLimiting = true
 	}
 	if settings.Get().DhtConnectionLimit > 0 {
 		bt.config.ConnTracker.SetMaxEntries(settings.Get().DhtConnectionLimit)
@@ -130,12 +130,12 @@ func (bt *BTServer) configure() {
 		}
 	}
 	if int(float64(settings.Get().ConnectionsLimit)*0.5) <= 25 {
-		bt.config.HalfOpenConnsPerTorrent = int(float64(settings.Get().ConnectionsLimit)*0.5)
+		bt.config.HalfOpenConnsPerTorrent = int(float64(settings.Get().ConnectionsLimit) * 0.5)
 	} else {
 		bt.config.HalfOpenConnsPerTorrent = 25
 	}
 	if int(float64(settings.Get().ConnectionsLimit)*2) <= 100 {
-		bt.config.TotalHalfOpenConns = int(float64(settings.Get().ConnectionsLimit)*2)
+		bt.config.TotalHalfOpenConns = int(float64(settings.Get().ConnectionsLimit) * 2)
 	} else {
 		bt.config.TotalHalfOpenConns = 100
 	}
@@ -174,7 +174,7 @@ func (bt *BTServer) configure() {
 			}
 		}
 	}
-	
+
 	log.Println("Configure client:", settings.Get())
 }
 
@@ -232,9 +232,9 @@ func (bt *BTServer) BTState() *BTState {
 	btState.LocalPort = bt.client.LocalPort()
 	btState.PeerID = fmt.Sprintf("%x", bt.client.PeerID())
 	btState.BannedIPs = len(bt.client.BadPeerIPs())
-//	for _, dht := range bt.client.DhtServers() {
-//		btState.DHTs = append(btState.DHTs, dht)
-//	}
+	//	for _, dht := range bt.client.DhtServers() {
+	//		btState.DHTs = append(btState.DHTs, dht)
+	//	}
 	for _, t := range bt.torrents {
 		btState.Torrents = append(btState.Torrents, t)
 	}
