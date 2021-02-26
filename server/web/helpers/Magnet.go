@@ -48,7 +48,7 @@ func GetMagnet(link string) (*metainfo.Magnet, []byte, error) {
 }
 
 func getMag(link string) (*metainfo.Magnet, error) {
-	mag, err := metainfo.ParseMagnetUri(link)
+	mag, err := metainfo.ParseMagnetURI(link)
 	return &mag, err
 }
 

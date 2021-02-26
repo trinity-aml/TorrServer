@@ -134,11 +134,11 @@ func (bt *BTServer) configure() {
 	} else {
 		bt.config.HalfOpenConnsPerTorrent = 25
 	}
-	if int(float64(settings.Get().ConnectionsLimit)*2) <= 100 {
-		bt.config.TotalHalfOpenConns = int(float64(settings.Get().ConnectionsLimit) * 2)
-	} else {
-		bt.config.TotalHalfOpenConns = 100
-	}
+	//if int(float64(settings.Get().ConnectionsLimit)*2) <= 100 {
+	//	bt.config.TotalHalfOpenConns = int(float64(settings.Get().ConnectionsLimit) * 2)
+	//} else {
+	//	bt.config.TotalHalfOpenConns = 100
+	//}
 	if settings.Get().DownloadRateLimit > 0 {
 		bt.config.DownloadRateLimiter = utils.Limit(settings.Get().DownloadRateLimit * 1024)
 	}
