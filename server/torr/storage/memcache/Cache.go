@@ -54,10 +54,13 @@ func NewCache(capacity int64, storage *Storage) *Cache {
 
 func (c *Cache) Init(info *metainfo.Info, hash metainfo.Hash) {
 	log.Println("Create cache for:", info.Name)
+	ra := info.PieceLength * 4
+	if settings.Get().CacheSize == 0 || settings.Get().CacheSize < ra*4 {
+		c.capacity = ra * 4
+	}
 	if c.capacity == 0 {
 		c.capacity = info.PieceLength * 6
 	}
-
 	//Min capacity of 2 pieces length
 	cap := info.PieceLength * 2
 	if c.capacity < cap {
@@ -220,10 +223,11 @@ func (c *Cache) ReadersLen() int {
 func (c *Cache) AdjustRA(readahead int64) {
 	c.muReader.Lock()
 	defer c.muReader.Unlock()
-	if settings.Get().CacheSize == 0 {
-		c.capacity = readahead * 3
+	if settings.Get().CacheSize == 0 || settings.Get().CacheSize < readahead*4 {
+		c.capacity = readahead * 4
 	}
 	for r, _ := range c.readers {
 		r.SetReadahead(readahead)
+		r.SetResponsive()
 	}
 }
