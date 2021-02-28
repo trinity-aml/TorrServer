@@ -136,6 +136,17 @@ var settingsPage = `
                 <input id="PeersListenPort" class="form-control" type="number" autocomplete="off">
             </div>
          	<small class="form-text text-muted">0 - случайный порт</small>
+            <div class="form-check">
+                <input id="AutoListenPort" class="form-check-input" type="checkbox" autocomplete="off">
+                <label for="AutoListenPort">Генерировать новый случайный порт при каждом запуске</label>
+            </div>
+         	<small class="form-text text-muted">Работает только, если порт = 0</small>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <div class="input-group-text">Случайно сгенерированный порт (только информация)</div>
+                </div>
+                <input id="AutoListenPortN" class="form-control" type="number" autocomplete="off">
+            </div>
 		<br>
             <div class="input-group">
                 <div class="input-group-prepend">
@@ -205,10 +216,11 @@ var settingsPage = `
 			data.DisableDHT = $('#DisableDHT').prop('checked');
 			data.DisableUpload = $('#DisableUpload').prop('checked');
 			data.EnableDebug = $('#EnableDebug').prop('checked');
+			data.AutoListenPort = $('#AutoListenPort').prop('checked');
 			data.Encryption = Number($('#Encryption').val());
 			data.ChooseStrategy = Number($('#ChooseStrategy').val());
 			data.ChooseTrackers = Number($('#ChooseTrackers').val());
-			
+
 			data.ConnectionsLimit = Number($('#ConnectionsLimit').val());
 			data.DhtConnectionLimit = Number($('#DhtConnectionLimit').val());
  
@@ -243,10 +255,12 @@ var settingsPage = `
 					$('#DisableDHT').prop('checked', data.DisableDHT);
 					$('#DisableUpload').prop('checked', data.DisableUpload);
 					$('#EnableDebug').prop('checked', data.EnableDebug);
+					$('#AutoListenPort').prop('checked', data.AutoListenPort);
 					$('#Encryption').val(data.Encryption);
 					$('#ChooseStrategy').val(data.ChooseStrategy);
 					$('#ChooseTrackers').val(data.ChooseTrackers);
-					
+					$('#AutoListenPortN').val(data.AutoListenPortN);
+
          			$('#ConnectionsLimit').val(data.ConnectionsLimit);
          			$('#DhtConnectionLimit').val(data.DhtConnectionLimit);
          

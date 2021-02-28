@@ -47,27 +47,27 @@ func main() {
 	hosts := [6]string{"1.1.1.1", "1.0.0.1", "208.67.222.222", "208.67.220.220", "8.8.8.8", "8.8.4.4"}
 	ret := 0
 	for _, ip := range hosts {
-		ret = utils.DnsResolve("www.themoviedb.org",ip)
+		ret = utils.DnsResolve("www.themoviedb.org", ip)
 		switch {
-			case ret == 2:
-				fmt.Println("DNS resolver OK\n")
-			case ret == 1:
-				fmt.Println("New DNS resolver OK\n")
-			case ret == 0:
-				fmt.Println("New DNS resolver failed\n")
+		case ret == 2:
+			fmt.Println("DNS resolver OK\n")
+		case ret == 1:
+			fmt.Println("New DNS resolver OK\n")
+		case ret == 0:
+			fmt.Println("New DNS resolver failed\n")
 		}
 		if ret == 2 || ret == 1 {
 			break
 		}
 	}
-	
+
 	Preconfig(params.Kill)
 
 	server.Start(params.Path, params.Port)
-	if (params.RDB) {
-	    settings.SetRDB()
+	if params.RDB {
+		settings.SetRDB()
 	} else {
-	    settings.SaveSettings()
+		settings.SaveSettings()
 	}
 	fmt.Println(server.WaitServer())
 	time.Sleep(time.Second * 3)

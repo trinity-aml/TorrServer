@@ -16,11 +16,14 @@ var (
 
 func init() {
 	sets = new(Settings)
-	sets.CacheSize = 208 * 1024 * 1024
+	sets.CacheSize = 192 * 1024 * 1024
 	sets.EnableDebug = false
 	sets.PreloadBufferSize = 32 * 1024 * 1024
 	sets.ConnectionsLimit = 20
 	sets.DhtConnectionLimit = 500
+	sets.PeersListenPort = 0
+	sets.AutoListenPort = true
+	sets.AutoListenPortN = 0
 	sets.RetrackersMode = 1
 	sets.TorrentDisconnectTimeout = 30
 	sets.ChooseStrategy = 0
@@ -30,7 +33,8 @@ func init() {
 }
 
 type Settings struct {
-	CacheSize         int64 // in byte, def 200 mb
+	CacheSize int64 // in byte, def 192 mb
+
 	PreloadBufferSize int64 // in byte, buffer for preload
 
 	RetrackersMode int //0 - don`t add, 1 - add retrackers, 2 - remove retrackers
@@ -42,21 +46,22 @@ type Settings struct {
 	ChooseTrackers int //0 - ngosang list of trackers, 1 - https://newtrackon.com
 
 	//BT Config
-	EnableIPv6         bool
-	EnableDebug        bool
-	DisableTCP         bool
-	DisableUTP         bool
-	DisableUPNP        bool
-	DisableDHT         bool
-	DisableUpload      bool
-	ReadOnlyMode       bool
-	Encryption         int // 0 - Enable, 1 - disable, 2 - force
-	DownloadRateLimit  int // in kb, 0 - inf
-	UploadRateLimit    int // in kb, 0 - inf
-	ConnectionsLimit   int
-	DhtConnectionLimit int // 0 - inf
-	PeersListenPort    int
-
+	EnableIPv6               bool
+	EnableDebug              bool
+	DisableTCP               bool
+	DisableUTP               bool
+	DisableUPNP              bool
+	DisableDHT               bool
+	DisableUpload            bool
+	ReadOnlyMode             bool
+	Encryption               int // 0 - Enable, 1 - disable, 2 - force
+	DownloadRateLimit        int // in kb, 0 - inf
+	UploadRateLimit          int // in kb, 0 - inf
+	ConnectionsLimit         int
+	DhtConnectionLimit       int // 0 - inf
+	PeersListenPort          int
+	AutoListenPort           bool
+	AutoListenPortN          int
 	TorrentDisconnectTimeout int // in seconds
 }
 
@@ -67,6 +72,11 @@ func Get() *Settings {
 func (s *Settings) String() string {
 	buf, _ := json.MarshalIndent(sets, "", " ")
 	return string(buf)
+}
+
+func mediana(a float64, b float64) int64 {
+	ret := int64(math.Round(a/b) * b)
+	return ret
 }
 
 func ReadSettings() error {
@@ -97,21 +107,19 @@ func ReadSettings() error {
 	if sets.DhtConnectionLimit < 0 {
 		sets.DhtConnectionLimit = 500
 	}
-	if sets.CacheSize <= 0 {
-		sets.CacheSize = 208 * 1024 * 1024
+	if sets.CacheSize < 0 {
+		sets.CacheSize = 192 * 1024 * 1024
 	}
-
 	if sets.TorrentDisconnectTimeout < 1 {
 		sets.TorrentDisconnectTimeout = 1
 	}
-	NewCache := (math.Round(float64(sets.CacheSize) / float64(16*1024*1024))) * 16 * 1024 * 1024
-	sets.CacheSize = int64(NewCache)
-	NewPreload := (math.Round(float64(sets.PreloadBufferSize) / float64(16*1024*1024))) * 16 * 1024 * 1024
+	sets.CacheSize = mediana(float64(sets.CacheSize), float64(16*1024*1024))
+	NewPreload := mediana(float64(sets.PreloadBufferSize), float64(16*1024*1024))
 	if NewPreload < 32*1024*1024 {
 		NewPreload = 32 * 1024 * 1024
 	}
-	sets.PreloadBufferSize = int64(NewPreload)
-
+	sets.PreloadBufferSize = NewPreload
+	sets.AutoListenPortN = 0
 	return nil
 }
 

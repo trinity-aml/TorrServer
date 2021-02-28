@@ -1,23 +1,24 @@
 package utils
 
 import (
+	"context"
 	"encoding/base32"
 	"errors"
 	"fmt"
-	"context"
 	"io/ioutil"
 	"math/rand"
 	"net"
 	"net/http"
 	"strings"
 	"time"
+
 	"server/settings"
 
 	"github.com/anacrolix/torrent"
 	"golang.org/x/time/rate"
 )
 
-var defTrackers = []string {
+var defTrackers = []string{
 	"http://retracker.local/announce",
 	"http://bt4.t-ru.org/ann?magnet",
 	"http://retracker.mgts.by:80/announce",
@@ -43,10 +44,10 @@ var loadedTrackers []string
 func GetDefTrackers() []string {
 	var hosts []string
 	if settings.Get().ChooseTrackers == 0 {
-		hosts = []string {"https://raw.githubusercontent.com/ngosang/trackerslist/master/trackers_best_ip.txt"}
+		hosts = []string{"https://raw.githubusercontent.com/ngosang/trackerslist/master/trackers_best_ip.txt"}
 		fmt.Println("Load ngosang announcers\n")
 	} else if settings.Get().ChooseTrackers == 1 {
-		hosts = []string {"https://newtrackon.com/api/stable"}
+		hosts = []string{"https://newtrackon.com/api/stable"}
 		fmt.Println("Load newtrackon.com announcers\n")
 	}
 	for _, ip := range hosts {
@@ -76,7 +77,7 @@ func loadNewTracker(host string) {
 				}
 			}
 			if len(loadedTrackers) == 0 {
-				loadedTrackers = []string {"http://retracker.local/announce"}
+				loadedTrackers = []string{"http://retracker.local/announce"}
 				loadedTrackers = append(loadedTrackers, ret...)
 			} else {
 				loadedTrackers = append(loadedTrackers, ret...)

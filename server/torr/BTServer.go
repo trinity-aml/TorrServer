@@ -65,17 +65,20 @@ func (bt *BTServer) Reconnect() error {
 	return bt.Connect()
 }
 
+func mediana(a float64, b float64) int64 {
+	ret := int64(math.Round(a/b) * b)
+	return ret
+}
+
 func (bt *BTServer) configure() {
-	NewCache := (math.Round(float64(settings.Get().CacheSize) / float64(16*1024*1024))) * 16 * 1024 * 1024
-	settings.Get().CacheSize = int64(NewCache)
-	NewPreload := (math.Round(float64(settings.Get().PreloadBufferSize) / float64(16*1024*1024))) * 16 * 1024 * 1024
+	settings.Get().CacheSize = mediana(float64(settings.Get().CacheSize), float64(16*1024*1024))
+	NewPreload := mediana(float64(settings.Get().PreloadBufferSize), float64(16*1024*1024))
 	if NewPreload < 32*1024*1024 {
 		NewPreload = 32 * 1024 * 1024
 	}
 	settings.Get().PreloadBufferSize = int64(NewPreload)
 	bt.storage = memcache.NewStorage(settings.Get().CacheSize)
 
-	//blocklist, _ := iplist.MMapPackedFile(filepath.Join(settings.Path, "blocklist"))
 	blocklist, _ := utils.ReadBlockedIP()
 
 	userAgent := "qBittorrent/4.3.2"
@@ -91,9 +94,6 @@ func (bt *BTServer) configure() {
 	bt.config.NoDefaultPortForwarding = settings.Get().DisableUPNP
 	bt.config.NoDHT = settings.Get().DisableDHT
 	bt.config.NoUpload = settings.Get().DisableUpload
-	//bt.config.DropMutuallyCompletePeers = true
-	//bt.config.DropDuplicatePeerIds = true
-	//bt.config.DisableAcceptRateLimiting = false
 	bt.config.HeaderObfuscationPolicy = torrent.HeaderObfuscationPolicy{
 		RequirePreferred: settings.Get().Encryption == 2, // Whether the value of Preferred is a strict requirement
 		Preferred:        settings.Get().Encryption != 1, // Whether header obfuscation is preferred
@@ -106,14 +106,14 @@ func (bt *BTServer) configure() {
 	bt.config.ExtendedHandshakeClientVersion = cliVers
 	bt.config.EstablishedConnsPerTorrent = settings.Get().ConnectionsLimit
 	bt.config.UpnpID = "YouROK/TorrServer_v1"
-	if settings.Get().ChooseStrategy == 1 {
+	timeout := settings.Get().TimeStrategy
+	switch {
+	case settings.Get().ChooseStrategy == 1:
 		bt.config.DefaultRequestStrategy = torrent.RequestStrategyFastest()
-	} else if settings.Get().ChooseStrategy == 2 {
+	case settings.Get().ChooseStrategy == 2:
 		bt.config.DefaultRequestStrategy = torrent.RequestStrategyFuzzing()
-	} else {
-		Timeout := settings.Get().TimeStrategy
-		bt.config.DefaultRequestStrategy = torrent.RequestStrategyDuplicateRequestTimeout(Timeout * time.Second)
-		//bt.config.DisableAcceptRateLimiting = true
+	case settings.Get().ChooseStrategy == 0:
+		bt.config.DefaultRequestStrategy = torrent.RequestStrategyDuplicateRequestTimeout(timeout * time.Second)
 	}
 	if settings.Get().DhtConnectionLimit > 0 {
 		bt.config.ConnTracker.SetMaxEntries(settings.Get().DhtConnectionLimit)
@@ -134,11 +134,6 @@ func (bt *BTServer) configure() {
 	} else {
 		bt.config.HalfOpenConnsPerTorrent = 25
 	}
-	//if int(float64(settings.Get().ConnectionsLimit)*2) <= 100 {
-	//	bt.config.TotalHalfOpenConns = int(float64(settings.Get().ConnectionsLimit) * 2)
-	//} else {
-	//	bt.config.TotalHalfOpenConns = 100
-	//}
 	if settings.Get().DownloadRateLimit > 0 {
 		bt.config.DownloadRateLimiter = utils.Limit(settings.Get().DownloadRateLimit * 1024)
 	}
@@ -147,7 +142,9 @@ func (bt *BTServer) configure() {
 	}
 	if settings.Get().PeersListenPort > 0 {
 		bt.config.ListenPort = settings.Get().PeersListenPort
-	} else if settings.Get().PeersListenPort <= 0 {
+		settings.Get().AutoListenPortN = 0
+		settings.Get().AutoListenPort = false
+	} else if settings.Get().PeersListenPort <= 0 && settings.Get().AutoListenPortN == 0 {
 		if settings.Get().DisableUPNP == true {
 			bt.config.NoDefaultPortForwarding = false
 			settings.Get().DisableUPNP = false
@@ -169,7 +166,12 @@ func (bt *BTServer) configure() {
 				log.Println("Error:", err)
 			}
 			if m == 1 {
-				settings.Get().PeersListenPort = n
+				if settings.Get().AutoListenPort == false {
+					settings.Get().PeersListenPort = n
+					settings.Get().AutoListenPortN = 0
+				} else {
+					settings.Get().AutoListenPortN = n
+				}
 				break
 			}
 		}

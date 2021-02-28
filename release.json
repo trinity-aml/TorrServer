@@ -1,20 +1,20 @@
 {
  "Name": "TorrServer",
- "Version": "1.1.85",
- "BuildDate": "26.02.2021",
+ "Version": "1.1.86",
+ "BuildDate": "28.02.2021",
  "Links": {
-  "darwin-amd64": "https://github.com/trinity-aml/TorrServer/releases/download/1.1.85/TorrServer-darwin-amd64",
-  "darwin-arm64": "https://github.com/trinity-aml/TorrServer/releases/download/1.1.85/TorrServer-darwin-arm64",
-  "freebsd-amd64": "https://github.com/trinity-aml/TorrServer/releases/download/1.1.85/TorrServer-freebsd-amd64",
-  "linux-386": "https://github.com/trinity-aml/TorrServer/releases/download/1.1.85/TorrServer-linux-386",
-  "linux-amd64": "https://github.com/trinity-aml/TorrServer/releases/download/1.1.85/TorrServer-linux-amd64",
-  "linux-arm64": "https://github.com/trinity-aml/TorrServer/releases/download/1.1.85/TorrServer-linux-arm64",
-  "linux-arm7": "https://github.com/trinity-aml/TorrServer/releases/download/1.1.85/TorrServer-linux-arm7",
-  "linux-mips": "https://github.com/trinity-aml/TorrServer/releases/download/1.1.85/TorrServer-linux-mips",
-  "linux-mips64": "https://github.com/trinity-aml/TorrServer/releases/download/1.1.85/TorrServer-linux-mips64",
-  "linux-mips64le": "https://github.com/trinity-aml/TorrServer/releases/download/1.1.85/TorrServer-linux-mips64le",
-  "linux-mipsle": "https://github.com/trinity-aml/TorrServer/releases/download/1.1.85/TorrServer-linux-mipsle",
-  "windows-386.exe": "https://github.com/trinity-aml/TorrServer/releases/download/1.1.85/TorrServer-windows-386.exe",
-  "windows-amd64.exe": "https://github.com/trinity-aml/TorrServer/releases/download/1.1.85/TorrServer-windows-amd64.exe"
+  "darwin-amd64": "https://github.com/trinity-aml/TorrServer/releases/download/1.1.86/TorrServer-darwin-amd64",
+  "darwin-arm64": "https://github.com/trinity-aml/TorrServer/releases/download/1.1.86/TorrServer-darwin-arm64",
+  "freebsd-amd64": "https://github.com/trinity-aml/TorrServer/releases/download/1.1.86/TorrServer-freebsd-amd64",
+  "linux-386": "https://github.com/trinity-aml/TorrServer/releases/download/1.1.86/TorrServer-linux-386",
+  "linux-amd64": "https://github.com/trinity-aml/TorrServer/releases/download/1.1.86/TorrServer-linux-amd64",
+  "linux-arm64": "https://github.com/trinity-aml/TorrServer/releases/download/1.1.86/TorrServer-linux-arm64",
+  "linux-arm7": "https://github.com/trinity-aml/TorrServer/releases/download/1.1.86/TorrServer-linux-arm7",
+  "linux-mips": "https://github.com/trinity-aml/TorrServer/releases/download/1.1.86/TorrServer-linux-mips",
+  "linux-mips64": "https://github.com/trinity-aml/TorrServer/releases/download/1.1.86/TorrServer-linux-mips64",
+  "linux-mips64le": "https://github.com/trinity-aml/TorrServer/releases/download/1.1.86/TorrServer-linux-mips64le",
+  "linux-mipsle": "https://github.com/trinity-aml/TorrServer/releases/download/1.1.86/TorrServer-linux-mipsle",
+  "windows-386.exe": "https://github.com/trinity-aml/TorrServer/releases/download/1.1.86/TorrServer-windows-386.exe",
+  "windows-amd64.exe": "https://github.com/trinity-aml/TorrServer/releases/download/1.1.86/TorrServer-windows-amd64.exe"
  }
 }

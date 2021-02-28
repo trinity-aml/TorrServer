@@ -20,7 +20,7 @@ func MakeM3ULists(torrents []*settings.Torrent, host string) string {
 		mag, _, err := GetMagnet(magnet)
 		if err == nil {
 			mag.Trackers = []string{} // remove retrackers for small link size
-			mag.DisplayName = "" // clear dn from link - long query params may fail in QueryParam("link")
+			mag.DisplayName = ""      // clear dn from link - long query params may fail in QueryParam("link")
 			magnet = mag.String()
 		}
 		m3u += host + "/torrent/play?link=" + url.QueryEscape(magnet) + "&m3u=true&fn=file.m3u\n"
@@ -34,7 +34,7 @@ func MakeM3UPlayList(tor torr.TorrentStats, magnet string, host string) string {
 	mag, _, err := GetMagnet(magnet)
 	if err == nil {
 		mag.Trackers = []string{} //Remove retrackers for small link size
-		mag.DisplayName = "" //Remove dn from link (useless)
+		mag.DisplayName = ""      //Remove dn from link (useless)
 		magnet = mag.String()
 	}
 	magnet = url.QueryEscape(magnet)

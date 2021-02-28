@@ -167,12 +167,16 @@ func (t *Torrent) watch() {
 	}
 }
 
+func (t *Torrent) mediana(a float64, b float64) int64 {
+	ret := int64(math.Round(a/b) * b)
+	return ret
+}
+
 func (t *Torrent) getRA() int64 {
 	piece_l := t.cache.GetState().PiecesLength
 	adj := int64((int(piece_l) * t.Torrent.Stats().ActivePeers) / (1 + t.cache.ReadersLen()))
-	adj = int64((math.Round(float64(adj) / float64(piece_l))) * float64(piece_l))
-	//maxAdj := int64((math.Round((float64(settings.Get().CacheSize) / float64(4)) / float64(piece_l))) * float64(piece_l))
-	maxAdj := 4 * piece_l
+	adj = t.mediana(float64(adj), float64(piece_l))
+	maxAdj := piece_l * 4
 	switch {
 	case adj < piece_l:
 		adj = piece_l
