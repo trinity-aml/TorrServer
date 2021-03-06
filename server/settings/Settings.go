@@ -12,6 +12,8 @@ import (
 var (
 	sets      *Settings
 	StartTime time.Time
+	HttpAuth  bool
+	AuthUP    string
 )
 
 func init() {
@@ -54,6 +56,7 @@ type Settings struct {
 	DisableDHT               bool
 	DisableUpload            bool
 	ReadOnlyMode             bool
+	HttpAuth                 bool
 	Encryption               int // 0 - Enable, 1 - disable, 2 - force
 	DownloadRateLimit        int // in kb, 0 - inf
 	UploadRateLimit          int // in kb, 0 - inf

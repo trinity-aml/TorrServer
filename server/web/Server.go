@@ -13,6 +13,7 @@ import (
 	"server/settings"
 	"server/torr"
 	"server/version"
+	"server/web/auth"
 	"server/web/mods"
 	"server/web/templates"
 
@@ -50,6 +51,31 @@ func Start(port string) {
 	//server.Use(middleware.Logger())
 	server.Use(middleware.Recover())
 	server.Use(ServerHeaderSet)
+	var AuthString string
+	if settings.HttpAuth == true {
+		fmt.Println("Access need authorization pair user/password\n")
+		userPass := auth.GetAccounts()
+		server.Use(middleware.BasicAuth(func(username, password string, c echo.Context) (bool, error) {
+			if AuthString == fmt.Sprintf("%s:%s", username, password) {
+				return true, nil
+			} else {
+				for i := 0; i < len(userPass); i++ {
+					if i%2 == 0 {
+						var a string = userPass[i]
+						var b string = userPass[i+1]
+						if username == a && password == b {
+							fmt.Println("Find matched username/password\n")
+							AuthString = fmt.Sprintf("%s:%s", username, password)
+							settings.AuthUP = fmt.Sprintf("%s:%s@", username, password)
+							return true, nil
+						}
+					}
+				}
+			}
+			fmt.Println("Not find matched username/password. Access denied\n")
+			return false, nil
+		}))
+	}
 
 	templates.InitTemplate(server)
 	initTorrent(server)

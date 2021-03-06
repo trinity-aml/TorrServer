@@ -499,8 +499,11 @@ func torrentPlayListAll(c echo.Context) error {
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
-
-	m3u := helpers.MakeM3ULists(list, c.Scheme()+"://"+c.Request().Host)
+	var up string = ""
+	if settings.AuthUP != "" && settings.HttpAuth == true {
+		up = settings.AuthUP
+	}
+	m3u := helpers.MakeM3ULists(list, c.Scheme()+"://"+up+c.Request().Host)
 
 	c.Response().Header().Set("Content-Type", "audio/x-mpegurl")
 	c.Response().Header().Set("Connection", "close")
@@ -567,7 +570,11 @@ func torrentPlay(c echo.Context) error {
 
 	if strings.ToLower(mm3u) == "true" {
 		mt := tor.Torrent.Metainfo()
-		m3u := helpers.MakeM3UPlayList(tor.Stats(), mt.Magnet(tor.Name(), tor.Hash()).String(), c.Scheme()+"://"+c.Request().Host)
+		var up string = ""
+		if settings.AuthUP != "" && settings.HttpAuth == true {
+			up = settings.AuthUP
+		}
+		m3u := helpers.MakeM3UPlayList(tor.Stats(), mt.Magnet(tor.Name(), tor.Hash()).String(), c.Scheme()+"://"+up+c.Request().Host)
 		c.Response().Header().Set("Content-Type", "audio/x-mpegurl")
 		c.Response().Header().Set("Connection", "close")
 		name := utils.CleanFName(tor.Name()) + ".m3u"

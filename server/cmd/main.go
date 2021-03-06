@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"path/filepath"
 	"time"
 
 	"github.com/alexflint/go-arg"
@@ -16,11 +17,12 @@ import (
 )
 
 type args struct {
-	Port string `arg:"-p" help:"web server port"`
-	Path string `arg:"-d" help:"database path"`
-	Add  string `arg:"-a" help:"add torrent link and exit"`
-	RDB  bool   `arg:"-r" help:"start in read-only DB mode"`
-	Kill bool   `arg:"-k" help:"dont kill program on signal"`
+	Port     string `arg:"-p" help:"web server port"`
+	Path     string `arg:"-d" help:"database path"`
+	Add      string `arg:"-a" help:"add torrent link and exit"`
+	RDB      bool   `arg:"-r" help:"start in read-only DB mode"`
+	HttpAuth bool   `arg:"-b" help:"Http auth on all requests"`
+	Kill     bool   `arg:"-k" help:"dont kill program on signal"`
 }
 
 func (args) Version() string {
@@ -33,7 +35,11 @@ func main() {
 	arg.MustParse(&params)
 
 	if params.Path == "" {
-		params.Path, _ = os.Getwd()
+		ex, err := os.Executable()
+		if err != nil {
+			panic(err)
+		}
+		params.Path = filepath.Dir(ex)
 	}
 
 	if params.Port == "" {
@@ -44,10 +50,13 @@ func main() {
 		add()
 	}
 
+	settings.Path = params.Path
+	settings.HttpAuth = params.HttpAuth
+
 	hosts := [6]string{"1.1.1.1", "1.0.0.1", "208.67.222.222", "208.67.220.220", "8.8.8.8", "8.8.4.4"}
 	ret := 0
 	for _, ip := range hosts {
-		ret = utils.DnsResolve("www.themoviedb.org", ip)
+		ret = utils.DnsResolve("www.google.com", ip)
 		switch {
 		case ret == 2:
 			fmt.Println("DNS resolver OK\n")
