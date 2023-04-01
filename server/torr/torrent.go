@@ -2,6 +2,7 @@ package torr
 
 import (
 	"errors"
+	"math"
 	"sort"
 	"sync"
 	"time"
@@ -192,17 +193,30 @@ func (t *Torrent) progressEvent() {
 	t.updateRA()
 }
 
+func (t *Torrent) mediana(a float64, b float64) int64 {
+	ret := int64(math.Round(a/b) * b)
+	return ret
+}
+
 func (t *Torrent) updateRA() {
 	t.muTorrent.Lock()
 	defer t.muTorrent.Unlock()
 	if t.Torrent != nil && t.Torrent.Info() != nil {
 		pieceLen := t.Torrent.Info().PieceLength
 		adj := pieceLen * int64(t.Torrent.Stats().ActivePeers) / int64(1+t.cache.Readers())
+		adj = t.mediana(float64(adj), float64(pieceLen))
+		adj2 := t.mediana(float64(settings.BTsets.CacheSize), float64(pieceLen))
+		if adj2 == 0 {
+			adj2 = 4 * 16 * 1024 * 1024
+		}
+		if adj > adj2 {
+			adj = adj2
+		}
 		switch {
 		case adj < pieceLen:
 			adj = pieceLen
-		case adj > pieceLen*4:
-			adj = pieceLen * 4
+		case adj > 4*16*1024*1024:
+			adj = 4 * 16 * 1024 * 1024
 		}
 		go t.cache.AdjustRA(adj)
 	}
