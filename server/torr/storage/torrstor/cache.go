@@ -123,11 +123,15 @@ func (c *Cache) removePiece(piece *Piece) {
 func (c *Cache) AdjustRA(readahead int64) {
 	if settings.BTsets.CacheSize == 0 {
 		c.capacity = readahead * 3
+		if c.capacity > 4*16*1024*1024 {
+			c.capacity = 4 * 16 * 1024 * 1024
+		}
 	}
 	if c.Readers() > 0 {
 		c.muReaders.Lock()
 		for r := range c.readers {
 			r.SetReadahead(readahead)
+			r.SetResponsive()
 		}
 		c.muReaders.Unlock()
 	}

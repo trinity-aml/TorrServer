@@ -2,9 +2,11 @@ package utils
 
 import (
 	"encoding/base32"
+	"fmt"
 	"io/ioutil"
 	"math/rand"
 	"net/http"
+	"os"
 	"path/filepath"
 	"strings"
 
@@ -56,24 +58,114 @@ func GetDefTrackers() []string {
 	return loadedTrackers
 }
 
+func RemoveDuplicates[T string | int](tSlice []T) []T {
+	allKeys := make(map[T]bool)
+	list := []T{}
+	for _, item := range tSlice {
+		if _, value := allKeys[item]; !value {
+			allKeys[item] = true
+			list = append(list, item)
+		}
+	}
+	return list
+}
+
+func RemoveLine(a []string, i int) {
+	copy(a[i:], a[i+1:])
+	a[len(a)-1] = ""
+	a = a[:len(a)-1]
+}
+
+func Contains(a []string, x string) bool {
+	for _, n := range a {
+		if x == n {
+			return true
+		}
+	}
+	return false
+}
+
+func Find(a []string, x string) int {
+	for i, n := range a {
+		if x == n {
+			return i
+		}
+	}
+	return len(a)
+}
+
+func GetTracker(a string) ([]string, bool) {
+	name := filepath.Join(settings.Path, a)
+	buf, err := ioutil.ReadFile(name)
+	if err == nil {
+		list := strings.Split(string(buf), "\n")
+		var ret []string
+		for _, l := range list {
+			if strings.HasPrefix(l, "udp") || strings.HasPrefix(l, "http") {
+				ret = append(ret, l)
+			}
+		}
+		return ret, true
+	}
+	return nil, false
+}
+
+var defaultUrl = []string{
+	"https://raw.githubusercontent.com/ngosang/trackerslist/master/trackers_best_ip.txt",
+	//	"https://newtrackon.com/api/stable",
+	//	"https://raw.githubusercontent.com/XIU2/TrackersListCollection/master/best.txt",
+}
+
 func loadNewTracker() {
 	if len(loadedTrackers) > 0 {
 		return
 	}
-	resp, err := http.Get("https://raw.githubusercontent.com/ngosang/trackerslist/master/trackers_best_ip.txt")
-	if err == nil {
-		buf, err := ioutil.ReadAll(resp.Body)
+	got, get := GetTracker("default_url.txt")
+	if len(got) > 0 && get == true {
+		defaultUrl = nil
+		defaultUrl = got
+	}
+	for _, a := range defaultUrl {
+		var resp, err = http.Get(a)
 		if err == nil {
-			arr := strings.Split(string(buf), "\n")
-			var ret []string
-			for _, s := range arr {
-				s = strings.TrimSpace(s)
-				if len(s) > 0 {
-					ret = append(ret, s)
+			buf, err := ioutil.ReadAll(resp.Body)
+			if err == nil {
+				arr := strings.Split(string(buf), "\n")
+				var ret []string
+				for _, s := range arr {
+					s = strings.TrimSpace(s)
+					if len(s) > 0 {
+						ret = append(ret, s)
+					}
+				}
+				loadedTrackers = append(loadedTrackers, ret...)
+			}
+		}
+	}
+	TrackersDel, back := GetTracker("blacklist_tracker.txt")
+	if back != false {
+		if len(TrackersDel) > 0 {
+			for _, a := range TrackersDel {
+				if Contains(loadedTrackers, a) {
+					i := Find(loadedTrackers, a)
+					RemoveLine(loadedTrackers, i)
 				}
 			}
-			loadedTrackers = append(ret, defTrackers...)
 		}
+	}
+	loadedTrackers = append(loadedTrackers, defTrackers...)
+	loadedTrackers = RemoveDuplicates(loadedTrackers)
+	path := filepath.Join(settings.Path, "trackers.tmp")
+	file, err := os.Create(path)
+	if err == nil {
+		defer file.Close()
+		for _, c := range loadedTrackers {
+			_, err := file.WriteString(c + "\n")
+			if err != nil {
+				fmt.Println(err)
+			}
+		}
+		fmt.Println("Trackers file done")
 	}
 }
 

@@ -71,7 +71,7 @@ for PLATFORM in "${PLATFORMS[@]}"; do
   set_gomips "$GOARCH"
   BIN_FILENAME="${OUTPUT}-${GOOS}-${GOARCH}${GOARM}"
   if [[ "${GOOS}" == "windows" ]]; then BIN_FILENAME="${BIN_FILENAME}.exe"; fi
-  CMD="GOOS=${GOOS} GOARCH=${GOARCH} ${GO_ARM} ${GO_MIPS} ${GOBIN} build ${BUILD_FLAGS} -o ${BIN_FILENAME} ./cmd"
+  CMD="GOOS=${GOOS} GOARCH=${GOARCH} ${GO_ARM} ${GO_MIPS} ${GOBIN} CGO_ENABLED=0 build ${BUILD_FLAGS} -o ${BIN_FILENAME} ./cmd"
   echo "${CMD}"
   eval "$CMD" || FAILURES="${FAILURES} ${GOOS}/${GOARCH}${GOARM}"
 #  CMD="../upx -q ${BIN_FILENAME}"; # upx --brute produce much smaller binaries
@@ -90,8 +90,8 @@ declare -a COMPILERS=(
   "amd64:x86_64-linux-android21-clang"
 )
 
-export NDK_VERSION="23.1.7779620" # 25.1.8937393
-export NDK_TOOLCHAIN=${ANDROID_HOME}/ndk/${NDK_VERSION}/toolchains/llvm/prebuilt/darwin-x86_64
+#export NDK_VERSION="23.1.7779620" # 25.1.8937393
+export NDK_TOOLCHAIN=/home/trinity1980/ndk/toolchains/llvm/prebuilt/linux-x86_64
 
 GOOS=android
 
@@ -109,6 +109,17 @@ for V in "${COMPILERS[@]}"; do
 #  echo "compress with ${CMD}"
 #  eval "$CMD"
 done
+
+#####################################
+### Windows build without GUI #######
+#####################################
+GOOS="windows"
+LDFLAGS="'-s -w -H=windowsgui'"
+BUILD_FLAGS="-ldflags=${LDFLAGS} -tags=nosqlite"
+BIN_FILENAME="${OUTPUT}-${GOOS}-amd64-nogui.exe"
+CMD="GOOS=${GOOS} GOARCH=${GOARCH} CGO_ENABLED=0 ${GOBIN} build ${BUILD_FLAGS} -o ${BIN_FILENAME} ./cmd"
+echo "${CMD}"
+eval "$CMD" || FAILURES="${FAILURES} windows/amd64 NOGUI"
 
 # eval errors
 if [[ "${FAILURES}" != "" ]]; then
