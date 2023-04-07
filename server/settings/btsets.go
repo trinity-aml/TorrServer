@@ -33,6 +33,7 @@ type BTSets struct {
 
 	// Rutor
 	EnableRutorSearch bool
+	RutorSearchAddr   string
 
 	// BT Config
 	EnableIPv6        bool

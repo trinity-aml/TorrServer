@@ -23,6 +23,7 @@ export default function SecondarySettingsComponent({ settings, inputForm }) {
     EnableIPv6,
     FriendlyName,
     EnableRutorSearch,
+    RutorSearchAddr,
     ForceEncrypt,
     DisableTCP,
     DisableUTP,
@@ -192,6 +193,16 @@ export default function SecondarySettingsComponent({ settings, inputForm }) {
         />
         <FormHelperText margin='none'>{t('SettingsDialog.EnableRutorSearchHint')}</FormHelperText>
       </FormGroup>
+      <TextField
+        onChange={inputForm}
+        margin='normal'
+        id='RutorSearchAddr'
+        label={t('SettingsDialog.RutorSearchAddr')}
+        value={RutorSearchAddr}
+        type='text'
+        variant='outlined'
+        fullWidth
+      />
       <FormControlLabel
         control={<Switch checked={EnableDebug} onChange={inputForm} id='EnableDebug' color='secondary' />}
         label={t('SettingsDialog.EnableDebug')}

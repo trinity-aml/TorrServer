@@ -16,6 +16,7 @@ export default {
   EnableIPv6: false,
   FriendlyName: '',
   EnableRutorSearch: false,
+  RutorSearchAddr: '',
   ForceEncrypt: false,
   PeersListenPort: 0,
   PreloadCache: 50,
