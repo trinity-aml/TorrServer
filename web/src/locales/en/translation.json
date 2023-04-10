@@ -125,6 +125,7 @@
     "FriendlyNameHint": "Leave blank to use default",
     "EnableRutorSearch": "Turn on torrents search by RuTor",
     "EnableRutorSearchHint": "You can search torrents by RuTor, even if the RuTor is not available. NOTE: The database takes about 500 MB of RAM.",
+    "RutorSearchAddr": "http address to download file base searching RuTor",
     "PeersListenPort": "Peers Listen Port",
     "PeersListenPortHint": "1024 - 65535, 0 - auto",
     "PreloadCache": "Preload Cache Before Play",

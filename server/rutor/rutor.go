@@ -75,12 +75,22 @@ func updateDB() bool {
 		return false
 	}
 
-	resp, err := http.Get("http://releases.yourok.ru/torr/rutor.ls")
+	var rutorBase string
+	if settings.BTsets.RutorSearchAddr == "" {
+		rutorBase = "http://releases.yourok.ru/torr/rutor.ls"
+	} else {
+		rutorBase = settings.BTsets.RutorSearchAddr + "/rutor.ls"
+	}
+
+	resp, err := http.Get(rutorBase)
 	if err != nil {
 		log.TLogln("Error connect to rutor db:", err)
 		out.Close()
 		return false
+	} else {
+		log.TLogln("Connect to RuTor db:", rutorBase)
 	}
+
 	defer resp.Body.Close()
 	_, err = io.Copy(out, resp.Body)
 	out.Close()
