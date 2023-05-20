@@ -39,6 +39,7 @@ func LoadTorrent(tor *Torrent) *Torrent {
 }
 
 func AddTorrent(spec *torrent.TorrentSpec, title, poster string, data string) (*Torrent, error) {
+
 	torr, err := NewTorrent(spec, bts)
 	if err != nil {
 		log.TLogln("error add torrent:", err)

@@ -2,6 +2,7 @@ package api
 
 import (
 	"net/http"
+	poster_tmdb "server/poster"
 	"strings"
 
 	"server/dlna"
@@ -79,6 +80,7 @@ func addTorrent(req torrReqJS, c *gin.Context) {
 	}
 
 	tor, err := torr.AddTorrent(torrSpec, req.Title, req.Poster, req.Data)
+
 	if err != nil {
 		log.TLogln("error add torrent:", err)
 		c.AbortWithError(http.StatusInternalServerError, err)
@@ -101,10 +103,14 @@ func addTorrent(req torrReqJS, c *gin.Context) {
 			}
 		}
 
+		title := tor.Title
+		tor.Poster = poster_tmdb.GetPoster(title)
+
 		if req.SaveToDB {
 			torr.SaveTorrentToDB(tor)
 		}
 	}()
+
 	// TODO: remove
 	if set.BTsets.EnableDLNA {
 		dlna.Stop()
