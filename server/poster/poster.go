@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-var link_search string = "/search/0/0/100/0/"
+var link_search string = "/search/0/0/110/0/"
 var tmdb_search string = "https://api.themoviedb.org/3/find/"
 var tmdb_poster string = "https://image.tmdb.org/t/p/original"
 
@@ -36,7 +36,7 @@ func GetPoster(name string) string {
 	if err != nil {
 		return ""
 	}
-	gp, err := regexp.Compile("<a href=\"/torrent/([0-9]+)/([A-Za-z0-9)-_]+)\">")
+	gp, err := regexp.Compile("<a href=\"/torrent/([0-9]+)/([A-Za-z0-9)-_!':;~+=,.]+)\">")
 	if err != nil {
 		log.TLogln("Error compile regex %v", err)
 	}
