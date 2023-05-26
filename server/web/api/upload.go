@@ -123,6 +123,8 @@ func torrentUpload(c *gin.Context) {
 					log.TLogln("Title: ", tor.Title)
 				}
 
+				tor.Title = strings.Trim(tor.Title, " ")
+				log.TLogln("Title: ", tor.Title)
 				tor_poster := poster_tmdb.GetPoster(tor.Title)
 				if tor_poster != "" {
 					tor.Poster = tor_poster

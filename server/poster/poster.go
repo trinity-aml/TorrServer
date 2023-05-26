@@ -31,6 +31,7 @@ func GetPoster(name string) string {
 	if api_key == "" {
 		return ""
 	}
+	name = strings.ReplaceAll(name, "/", "")
 	link := host + link_search + name
 	body, err := bodyget(link)
 	if err != nil {
