@@ -3,6 +3,7 @@ module server
 go 1.18
 
 require (
+	github.com/StalkR/imdb v1.0.13
 	github.com/agnivade/levenshtein v1.1.1
 	github.com/alexflint/go-arg v1.4.3
 	github.com/anacrolix/dms v1.5.1-0.20230317005814-6af26ec4c733
