@@ -1,9 +1,9 @@
 #!/bin/bash
 
 PLATFORMS=(
+  'linux/amd64'
   'linux/arm64'
   'linux/arm7'
-  'linux/amd64'
   'linux/arm5'
   'linux/386'
   'windows/amd64'
@@ -52,6 +52,9 @@ OUTPUT="${ROOT}/dist/TorrServer"
 echo "Build web"
 rm -fr web/build
 rm -fr web/node_modules
+cd web
+npx update-browserslist-db@latest
+cd ../
 export NODE_OPTIONS=--openssl-legacy-provider
 $GOBIN run gen_web.go
 
@@ -93,8 +96,8 @@ declare -a COMPILERS=(
   "amd64:x86_64-linux-android21-clang"
 )
 
-#export NDK_VERSION="23.1.7779620" # 25.1.8937393
-export NDK_TOOLCHAIN=/home/trinity1980/ndk/toolchains/llvm/prebuilt/linux-x86_64
+export NDK_VERSION="25.2.9519653" # 25.1.8937393
+export NDK_TOOLCHAIN="${PWD}/../../../android-ndk-r25c/toolchains/llvm/prebuilt/linux-x86_64"
 
 GOOS=android
 

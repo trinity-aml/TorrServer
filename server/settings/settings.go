@@ -3,7 +3,6 @@ package settings
 import (
 	"os"
 	"path/filepath"
-
 	"server/log"
 )
 
