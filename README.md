@@ -1,6 +1,30 @@
 ## TorrServer
 TorrServer, stream torrent to http
 
+### Additional trackers settings in config.yml
+Put config.yml to the working TorrServer directory near config.db.
+trackers - ваш список трекеров
+default_url - ссылка/ссылки на список трекеров из интернета 
+blacklist_tracker - черный список трекеров
+
+### Example config.yml
+>trackers: ['http://bt4.t-ru.org/ann?magnet',\
+>          'http://retracker.mgts.by:80/announce',\
+>          'http://tracker.city9x.com:2710/announce',\
+>          'http://tracker.electro-torrent.pl:80/announce',\
+>          'http://tracker.internetwarriors.net:1337/announce',\
+>          'http://tracker2.itzmx.com:6961/announce',\
+>          'udp://opentor.org:2710',\
+>          'udp://public.popcorn-tracker.org:6969/announce',\
+>          'http://bt.svao-ix.ru/announce',\
+>          'wss://tracker.btorrent.xyz',\
+>          'wss://tracker.openwebtorrent.com']\
+>default_url:	['https://raw.githubusercontent.com/ngosang/trackerslist/master/trackers_best_ip.txt',\
+>             'https://newtrackon.com/api/stable',\
+>             'https://raw.githubusercontent.com/XIU2/TrackersListCollection/master/best.txt']\
+>blacklist_tracker: ['udp://tracker.opentrackr.org:1337/announce',\
+>                    'udp://p4p.arenabg.com:1337/announce']
+
 ### Installation
 Just download server from releases and exec file\
 https://github.com/YouROK/TorrServer/releases \
