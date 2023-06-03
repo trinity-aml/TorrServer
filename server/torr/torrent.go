@@ -67,10 +67,10 @@ func NewTorrent(spec *torrent.TorrentSpec, bt *BTServer) (*Torrent, error) {
 		spec.Trackers = [][]string{utils.GetDefTrackers()}
 	}
 
-	trackers := utils.GetTrackerFromFile()
-	if len(trackers) > 0 {
-		spec.Trackers = append(spec.Trackers, [][]string{trackers}...)
-	}
+	//	trackers := utils.GetTrackerFromFile()
+	//	if len(trackers) > 0 {
+	//		spec.Trackers = append(spec.Trackers, [][]string{trackers}...)
+	//	}
 
 	goTorrent, _, err := bt.client.AddTorrentSpec(spec)
 	if err != nil {

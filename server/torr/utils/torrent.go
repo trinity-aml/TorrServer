@@ -120,6 +120,8 @@ func loadNewTracker() {
 			}
 		}
 	}
+	tr := GetTrackerFromFile()
+	loadedTrackers = append(loadedTrackers, tr...)
 	loadedTrackers = append(loadedTrackers, defTrackers...)
 	TrackersDel, back := config.ReadConfigParser("Blacklist_tracker")
 	if back == nil {
