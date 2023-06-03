@@ -10,6 +10,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"server/config"
 	"server/settings"
 
 	"golang.org/x/time/rate"
@@ -35,19 +36,12 @@ var defTrackers = []string{
 var loadedTrackers []string
 
 func GetTrackerFromFile() []string {
-	name := filepath.Join(settings.Path, "trackers.txt")
-	buf, err := ioutil.ReadFile(name)
+	buf, err := config.ReadConfigParser("Trackers")
 	if err == nil {
-		list := strings.Split(string(buf), "\n")
-		var ret []string
-		for _, l := range list {
-			if strings.HasPrefix(l, "udp") || strings.HasPrefix(l, "http") {
-				ret = append(ret, l)
-			}
-		}
-		return ret
+		return buf
+	} else {
+		return nil
 	}
-	return nil
 }
 
 func GetDefTrackers() []string {
@@ -94,22 +88,6 @@ func Find(a []string, x string) int {
 	return len(a)
 }
 
-func GetTracker(a string) ([]string, bool) {
-	name := filepath.Join(settings.Path, a)
-	buf, err := ioutil.ReadFile(name)
-	if err == nil {
-		list := strings.Split(string(buf), "\n")
-		var ret []string
-		for _, l := range list {
-			if strings.HasPrefix(l, "udp") || strings.HasPrefix(l, "http") {
-				ret = append(ret, l)
-			}
-		}
-		return ret, true
-	}
-	return nil, false
-}
-
 var defaultUrl = []string{
 	"https://raw.githubusercontent.com/ngosang/trackerslist/master/trackers_best_ip.txt",
 	//	"https://newtrackon.com/api/stable",
@@ -120,8 +98,8 @@ func loadNewTracker() {
 	if len(loadedTrackers) > 0 {
 		return
 	}
-	got, get := GetTracker("default_url.txt")
-	if len(got) > 0 && get == true {
+	got, get := config.ReadConfigParser("Default_url")
+	if len(got) > 0 && get == nil {
 		defaultUrl = nil
 		defaultUrl = got
 	}
@@ -142,8 +120,9 @@ func loadNewTracker() {
 			}
 		}
 	}
-	TrackersDel, back := GetTracker("blacklist_tracker.txt")
-	if back != false {
+	loadedTrackers = append(loadedTrackers, defTrackers...)
+	TrackersDel, back := config.ReadConfigParser("Blacklist_tracker")
+	if back == nil {
 		if len(TrackersDel) > 0 {
 			for _, a := range TrackersDel {
 				if Contains(loadedTrackers, a) {
@@ -153,7 +132,6 @@ func loadNewTracker() {
 			}
 		}
 	}
-	loadedTrackers = append(loadedTrackers, defTrackers...)
 	loadedTrackers = RemoveDuplicates(loadedTrackers)
 	path := filepath.Join(settings.Path, "trackers.tmp")
 	file, err := os.Create(path)

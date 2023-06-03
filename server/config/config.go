@@ -2,22 +2,25 @@ package config
 
 import "github.com/ilyakaznacheev/cleanenv"
 
-type ConfigParser struct {
-	Host   string `yaml:"host" env:"HOST_TOR" env-default:"http://rutor.info"`
-	ApiKey string `yaml:"api_key" env:"PORT_TOR" env-default:""`
+type ConfParser struct {
+	Trackers          []string `yaml:"trackers"`
+	Default_url       []string `yaml:"default_url"`
+	Blacklist_tracker []string `yaml:"blacklist_tracker"`
 }
 
-var cfg ConfigParser
+var cfg ConfParser
 
-func ReadConfigParser(vars string) (string, error) {
+func ReadConfigParser(vars string) ([]string, error) {
 	err := cleanenv.ReadConfig("config.yml", &cfg)
 	if err == nil {
 		switch {
-		case vars == "Host":
-			return cfg.Host, nil
-		case vars == "ApiKey":
-			return cfg.ApiKey, nil
+		case vars == "Trackers":
+			return cfg.Trackers, nil
+		case vars == "Default_url":
+			return cfg.Default_url, nil
+		case vars == "Blacklist_tracker":
+			return cfg.Blacklist_tracker, nil
 		}
 	}
-	return "", err
+	return nil, err
 }
