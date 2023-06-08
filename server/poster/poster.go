@@ -65,7 +65,8 @@ func GetPoster(name string) string {
 	if strings.Contains(name, "/") {
 		nameMass = strings.Split(name, "/")
 		nameMassNew = ""
-		gp, err := regexp.Compile("[А-Яа-я0-9-_!':;~+=,.[:space:]]+")
+		//		gp, err := regexp.Compile("[А-Яа-я0-9-_!':;~+=,.[:space:]]+")
+		gp, err := regexp.Compile("[A-Za-z0-9-_!':;~+=,.[:space:]]+")
 		if err != nil {
 			log.TLogln("Error compile regex %v", err)
 		}
