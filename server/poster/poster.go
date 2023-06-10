@@ -65,7 +65,8 @@ func GetPoster(name string) string {
 	if strings.Contains(name, "/") {
 		nameMass = strings.Split(name, "/")
 		nameMassNew = ""
-		gp, err := regexp.Compile("[А-Яа-я0-9-_!':;~+=,.[:space:]]+")
+		//		gp, err := regexp.Compile("[А-Яа-я0-9-_!':;~+=,.[:space:]]+")
+		gp, err := regexp.Compile("[A-Za-z0-9-_!':;~+=,.[:space:]]+")
 		if err != nil {
 			log.TLogln("Error compile regex %v", err)
 		}
@@ -78,6 +79,21 @@ func GetPoster(name string) string {
 		}
 		if len(nameMassNew) > 0 {
 			nameMassNew = strings.Trim(nameMassNew, " ")
+		} else {
+			gp2, err2 := regexp.Compile("[А-Яа-я0-9-_!':;~+=,.[:space:]]+")
+			if err2 != nil {
+				log.TLogln("Error compile regex %v", err2)
+			}
+			for _, word2 := range nameMass {
+				out2 := gp2.FindString(word2)
+				if len(out2) > 2 {
+					nameMassNew = out2
+					break
+				}
+			}
+			if len(nameMassNew) > 0 {
+				nameMassNew = strings.Trim(nameMassNew, " ")
+			}
 		}
 	} else {
 		nameMass = strings.Split(name, " ")
@@ -116,12 +132,12 @@ func GetPoster(name string) string {
 		log.TLogln("Error compile regex %v", err)
 	}
 	nameMassNew = strings.ReplaceAll(nameMassNew, gp.FindString(nameMassNew), "")
-	gp, err = regexp.Compile("S[0-9][0-9]")
+	gp, err = regexp.Compile("[Ss][0-9][0-9]")
 	if err != nil {
 		log.TLogln("Error compile regex %v", err)
 	}
 	nameMassNew = strings.ReplaceAll(nameMassNew, gp.FindString(nameMassNew), "")
-	gp, err = regexp.Compile("E[0-9][0-9]")
+	gp, err = regexp.Compile("[Ee][0-9][0-9]")
 	if err != nil {
 		log.TLogln("Error compile regex %v", err)
 	}
