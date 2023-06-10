@@ -15,6 +15,8 @@ var tor_q = []string{
 	"BDRip",
 	"HDRip",
 	"WEB-DL",
+	"WEBDL",
+	"XviD",
 	"WEB-DLRip",
 	"WEBRip",
 	"HDTV",
@@ -56,78 +58,38 @@ func (e *customTransport) RoundTrip(r *http.Request) (*http.Response, error) {
 }
 
 func GetPoster(name string) string {
-	var nameMass []string
-	var nameMassNew string
-	if strings.Contains(name, ".") {
-		name = strings.ReplaceAll(name, ".", " ")
-		name = strings.Trim(name, " ")
+	name = strings.ReplaceAll(name, ".", " ")
+	name = strings.ReplaceAll(name, "|", "")
+	name = strings.ReplaceAll(name, "(", "")
+	name = strings.ReplaceAll(name, ")", "")
+	name = strings.ReplaceAll(name, " RUS ", " ")
+	name = strings.ReplaceAll(name, " ENG ", " ")
+	nameMass := strings.Split(name, " ")
+	gp, err := regexp.Compile("[0-9][0-9][0-9][0-9]")
+	if err != nil {
+		log.TLogln("Error compile regex %v", err)
 	}
-	if strings.Contains(name, "/") {
-		nameMass = strings.Split(name, "/")
-		nameMassNew = ""
-		//		gp, err := regexp.Compile("[А-Яа-я0-9-_!':;~+=,.[:space:]]+")
-		gp, err := regexp.Compile("[A-Za-z0-9-_!':;~+=,.[:space:]]+")
-		if err != nil {
-			log.TLogln("Error compile regex %v", err)
-		}
-		for _, word := range nameMass {
-			out := gp.FindString(word)
-			if len(out) > 2 {
-				nameMassNew = out
-				break
-			}
-		}
-		if len(nameMassNew) > 0 {
-			nameMassNew = strings.Trim(nameMassNew, " ")
-		} else {
-			gp2, err2 := regexp.Compile("[А-Яа-я0-9-_!':;~+=,.[:space:]]+")
-			if err2 != nil {
-				log.TLogln("Error compile regex %v", err2)
-			}
-			for _, word2 := range nameMass {
-				out2 := gp2.FindString(word2)
-				if len(out2) > 2 {
-					nameMassNew = out2
-					break
+	for i, word := range nameMass {
+		for _, word2 := range tor_q {
+			if strings.EqualFold(word, word2) {
+				for l := i; l < len(nameMass); l++ {
+					nameMass[l] = ""
 				}
-			}
-			if len(nameMassNew) > 0 {
-				nameMassNew = strings.Trim(nameMassNew, " ")
+				nameMass = nameMass[:i]
 			}
 		}
-	} else {
-		nameMass = strings.Split(name, " ")
-		nameMassNew = ""
-		gp, err := regexp.Compile("[0-9][0-9][0-9][0-9]")
-		if err != nil {
-			log.TLogln("Error compile regex %v", err)
-		}
-		for i, word := range nameMass {
-			for _, word2 := range tor_q {
-				if word == word2 {
-					for l := i; l < len(nameMass); l++ {
-						nameMass[l] = ""
-					}
-					nameMass = nameMass[:i]
-				}
+		if len(gp.FindString(word)) > 0 {
+			for m := i + 1; m < len(nameMass); m++ {
+				nameMass[m] = ""
 			}
-			if len(gp.FindString(word)) > 0 {
-				for m := i + 1; m < len(nameMass); m++ {
-					nameMass[m] = ""
-				}
-				nameMass = nameMass[:i+1]
-			}
-		}
-		nameMassNew = strings.Join(nameMass, " ")
-		if len(nameMassNew) > 0 {
-			nameMassNew = strings.Trim(nameMassNew, " ")
+			nameMass = nameMass[:i+1]
 		}
 	}
-	nameMassNew = strings.ReplaceAll(nameMassNew, "(", "")
-	nameMassNew = strings.ReplaceAll(nameMassNew, ")", "")
-	nameMassNew = strings.ReplaceAll(nameMassNew, " RUS ", " ")
-	nameMassNew = strings.ReplaceAll(nameMassNew, " ENG ", " ")
-	gp, err := regexp.Compile("\\[[a-zA-Zа-яА-Я0-9-[:space:]+.,].+\\]")
+	nameMassNew := strings.Join(nameMass, " ")
+	if len(nameMassNew) > 0 {
+		nameMassNew = strings.Trim(nameMassNew, " ")
+	}
+	gp, err = regexp.Compile("\\[[a-zA-Zа-яА-Я0-9-[:space:]+.,].+\\]")
 	if err != nil {
 		log.TLogln("Error compile regex %v", err)
 	}
@@ -142,11 +104,35 @@ func GetPoster(name string) string {
 		log.TLogln("Error compile regex %v", err)
 	}
 	nameMassNew = strings.ReplaceAll(nameMassNew, gp.FindString(nameMassNew), "")
+	if strings.Contains(nameMassNew, "/") {
+		nameMass = strings.Split(nameMassNew, "/")
+		gp, err = regexp.Compile("[A-Za-z]+")
+		if err != nil {
+			log.TLogln("Error compile regex %v", err)
+		}
+		for _, word := range nameMass {
+			out := gp.FindString(word)
+			if len(out) > 2 {
+				nameMassNew = word
+				break
+			}
+		}
+		if len(nameMassNew) > 0 {
+			nameMassNew = strings.Trim(nameMassNew, " ")
+		} else {
+			for _, word2 := range nameMass {
+				nameMassNew = word2
+				break
+			}
+			if len(nameMassNew) > 0 {
+				nameMassNew = strings.Trim(nameMassNew, " ")
+			}
+		}
+	}
 	log.TLogln(nameMassNew)
 	client := &http.Client{
 		Transport: &customTransport{http.DefaultTransport},
 	}
-	nameMassNew = strings.Trim(nameMassNew, " ")
 	results, err := imdb.SearchTitle(client, nameMassNew)
 	var imdb_id string
 	if err == nil {
