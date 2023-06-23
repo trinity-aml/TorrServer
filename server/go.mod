@@ -5,7 +5,7 @@ go 1.18
 replace github.com/anacrolix/torrent v1.52.0 => github.com/tsynik/torrent v1.2.8
 
 require (
-	github.com/StalkR/imdb v1.0.13
+	github.com/StalkR/imdb v1.0.14
 	github.com/agnivade/levenshtein v1.1.1
 	github.com/alexflint/go-arg v1.4.3
 	github.com/anacrolix/dms v1.6.0
