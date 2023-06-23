@@ -3,14 +3,14 @@ module server
 go 1.18
 
 require (
-	github.com/StalkR/imdb v1.0.13
+	github.com/StalkR/imdb v1.0.14
 	github.com/agnivade/levenshtein v1.1.1
 	github.com/alexflint/go-arg v1.4.3
 	github.com/anacrolix/dms v1.6.0
 	github.com/anacrolix/log v0.14.0
 	github.com/anacrolix/missinggo v1.3.0
 	github.com/anacrolix/publicip v0.2.0
-	github.com/anacrolix/torrent v1.52.1-0.20230606004015-3901c3144bba
+	github.com/anacrolix/torrent v1.52.1
 	github.com/gin-contrib/cors v1.4.0
 	github.com/gin-contrib/location v0.0.2
 	github.com/gin-gonic/gin v1.9.1
@@ -36,7 +36,7 @@ require (
 	github.com/anacrolix/envpprof v1.2.1 // indirect
 	github.com/anacrolix/ffprobe v1.0.0 // indirect
 	github.com/anacrolix/generics v0.0.0-20230428105757-683593396d68 // indirect
-	github.com/anacrolix/go-libutp v1.2.0 // indirect
+	github.com/anacrolix/go-libutp v1.3.1-0.20230529052142-002f5b5abdd4 // indirect
 	github.com/anacrolix/missinggo/perf v1.0.0 // indirect
 	github.com/anacrolix/missinggo/v2 v2.7.2-0.20230527121029-a582b4f397b9 // indirect
 	github.com/anacrolix/mmsg v1.0.0 // indirect
