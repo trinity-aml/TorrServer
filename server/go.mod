@@ -5,7 +5,6 @@ go 1.18
 replace github.com/anacrolix/torrent v1.52.0 => github.com/tsynik/torrent v1.2.8
 
 require (
-	github.com/StalkR/imdb v1.0.14
 	github.com/agnivade/levenshtein v1.1.1
 	github.com/alexflint/go-arg v1.4.3
 	github.com/anacrolix/dms v1.6.0
@@ -13,6 +12,8 @@ require (
 	github.com/anacrolix/missinggo v1.3.0
 	github.com/anacrolix/publicip v0.3.0
 	github.com/anacrolix/torrent v1.52.0
+	github.com/cyruzin/golang-tmdb v1.5.1
+	github.com/essentialkaos/translit v2.0.4-0.20210911112006-c41f422f9ee7+incompatible
 	github.com/gin-contrib/cors v1.4.0
 	github.com/gin-contrib/location v0.0.2
 	github.com/gin-gonic/gin v1.9.0
@@ -80,4 +81,5 @@ require (
 	google.golang.org/protobuf v1.30.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	olympos.io/encoding/edn v0.0.0-20201019073823-d3554ca0b0a3 // indirect
+	pkg.re/essentialkaos/check.v1 v1.2.0 // indirect
 )
