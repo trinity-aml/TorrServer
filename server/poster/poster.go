@@ -51,10 +51,11 @@ var (
 	sq, _    = regexp.Compile("\\[[a-zA-Zа-яА-Я0-9-[:space:]+.,].+\\]")
 	ss, _    = regexp.Compile("[Ss][0-9][0-9]")
 	ee, _    = regexp.Compile("[Ee][0-9][0-9]")
-	ss2, _   = regexp.Compile("[0-9][0-9][a-zA-Zа-яА-Я][0-9][0-9][-][0-9][0-9]:space:[a-zA-Zа-яА-Я][a-zA-Zа-яА-Я]:space:[0-9][0-9]")
-	ss3, _   = regexp.Compile("[Ss][Ee][Zz][Oo][Nn]:space:[0-9]")
-	ss4, _   = regexp.Compile("[Ss][Ee][Rr][Ii][Ii]:space:[0-9]")
+	ss2, _   = regexp.Compile("[0-9][0-9][a-zA-Zа-яА-Я][0-9][0-9][-][0-9][0-9]")
+	ss3, _   = regexp.Compile("[Ss][Ee][Zz][Oo][Nn][[:space:]][0-9]")
+	ss4, _   = regexp.Compile("[Ss][Ee][Rr][Ii][Ii][[:space:]][0-9]")
 	ss5, _   = regexp.Compile("[Ss][0-9][0-9][-][0-9][0-9]")
+	ss6, _   = regexp.Compile("[0-9][0-9][-][0-9][0-9]")
 	latin, _ = regexp.Compile("[A-Za-z]+")
 	cyr, _   = regexp.Compile("[А-Яа-я]+")
 )
@@ -110,6 +111,14 @@ func GetPoster(name string) string {
 
 	nameMass := strings.Split(name, " ")
 
+	if len(ss.FindString(name)) > 0 || len(ee.FindString(name)) > 0 || len(ss2.FindString(name)) > 0 || len(ss3.FindString(name)) > 0 || len(ss4.FindString(name)) > 0 || len(ss5.FindString(name)) > 0 || len(ss6.FindString(name)) > 0 {
+		tv = true
+		movie = false
+		log.TLogln("Serial: ", tv)
+	} else {
+		log.TLogln("Movie: ", movie)
+	}
+
 	for _, word := range nameMass {
 		if len(time.FindString(word)) > 0 {
 			if strings.Contains(word, "-") {
@@ -120,10 +129,6 @@ func GetPoster(name string) string {
 			} else {
 				year, _ = strconv.Atoi(time.FindString(word))
 			}
-		}
-		if len(ss.FindString(word)) > 0 || len(ee.FindString(word)) > 0 || len(ss2.FindString(word)) > 0 || len(ss3.FindString(word)) > 0 || len(ss4.FindString(word)) > 0 || len(ss5.FindString(word)) > 0 {
-			tv = true
-			movie = false
 		}
 	}
 
