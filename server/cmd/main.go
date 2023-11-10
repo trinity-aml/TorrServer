@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"fmt"
-	"io/ioutil"
 	"net"
 	"os"
 	"path/filepath"
@@ -151,7 +150,7 @@ func watchTDir(dir string) {
 		path = dir
 	}
 	for {
-		files, err := ioutil.ReadDir(path)
+		files, err := os.ReadDir(path)
 		if err == nil {
 			for _, file := range files {
 				filename := filepath.Join(path, file.Name())
@@ -168,12 +167,20 @@ func watchTDir(dir string) {
 								tor.Drop()
 								os.Remove(filename)
 								time.Sleep(time.Second)
+							} else {
+								log.TLogln("Error get info from torrent")
 							}
+						} else {
+							log.TLogln("Error parse torrent file:", err)
 						}
+					} else {
+						log.TLogln("Error parse file name:", err)
 					}
 				}
 			}
+		} else {
+			log.TLogln("Error read dir:", err)
 		}
-		time.Sleep(time.Second)
+		time.Sleep(time.Second * 5)
 	}
 }

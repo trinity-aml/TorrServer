@@ -2,7 +2,6 @@ package torr
 
 import (
 	"errors"
-	"math"
 	"sort"
 	"sync"
 	"time"
@@ -67,10 +66,10 @@ func NewTorrent(spec *torrent.TorrentSpec, bt *BTServer) (*Torrent, error) {
 		spec.Trackers = [][]string{utils.GetDefTrackers()}
 	}
 
-	//	trackers := utils.GetTrackerFromFile()
-	//	if len(trackers) > 0 {
-	//		spec.Trackers = append(spec.Trackers, [][]string{trackers}...)
-	//	}
+	trackers := utils.GetTrackerFromFile()
+	if len(trackers) > 0 {
+		spec.Trackers = append(spec.Trackers, [][]string{trackers}...)
+	}
 
 	goTorrent, _, err := bt.client.AddTorrentSpec(spec)
 	if err != nil {
@@ -193,33 +192,22 @@ func (t *Torrent) progressEvent() {
 	t.updateRA()
 }
 
-func (t *Torrent) mediana(a float64, b float64) int64 {
-	ret := int64(math.Round(a/b) * b)
-	return ret
-}
-
 func (t *Torrent) updateRA() {
-	t.muTorrent.Lock()
-	defer t.muTorrent.Unlock()
-	if t.Torrent != nil && t.Torrent.Info() != nil {
-		pieceLen := t.Torrent.Info().PieceLength
-		adj := pieceLen * int64(t.Torrent.Stats().ActivePeers) / int64(1+t.cache.Readers())
-		adj = t.mediana(float64(adj), float64(pieceLen))
-		adj2 := t.mediana(float64(settings.BTsets.CacheSize), float64(pieceLen))
-		if adj2 == 0 {
-			adj2 = 4 * 16 * 1024 * 1024
-		}
-		if adj > adj2 {
-			adj = adj2
-		}
-		switch {
-		case adj < pieceLen:
-			adj = pieceLen
-		case adj > 4*16*1024*1024:
-			adj = 4 * 16 * 1024 * 1024
-		}
-		go t.cache.AdjustRA(adj)
-	}
+	// t.muTorrent.Lock()
+	// defer t.muTorrent.Unlock()
+	// if t.Torrent != nil && t.Torrent.Info() != nil {
+	// 	pieceLen := t.Torrent.Info().PieceLength
+	// 	adj := pieceLen * int64(t.Torrent.Stats().ActivePeers) / int64(1+t.cache.Readers())
+	// 	switch {
+	// 	case adj < pieceLen:
+	// 		adj = pieceLen
+	// 	case adj > pieceLen*4:
+	// 		adj = pieceLen * 4
+	// 	}
+	// 	go t.cache.AdjustRA(adj)
+	// }
+	adj := int64(16 << 20) // 16 MB fixed RA
+	go t.cache.AdjustRA(adj)
 }
 
 func (t *Torrent) expired() bool {
