@@ -10,6 +10,8 @@ var (
 	tdb      *TDB
 	Path     string
 	Port     string
+	Ssl      bool
+	SslPort  string
 	ReadOnly bool
 	HttpAuth bool
 	SearchWA bool
