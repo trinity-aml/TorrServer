@@ -11,6 +11,7 @@ PLATFORMS=(
   'darwin/amd64'
   'darwin/arm64'
   'freebsd/amd64'
+  'freebsd/arm7'
   'linux/mips'
   'linux/mipsle'
   'linux/mips64'
@@ -61,7 +62,7 @@ $GOBIN run gen_web.go
 #### Build server
 echo "Build server"
 cd "${ROOT}/server" || exit 1
-$GOBIN clean -i -r -cache #--modcache
+$GOBIN clean -i -r -cache --modcache
 $GOBIN mod tidy
 
 BUILD_FLAGS="-ldflags=${LDFLAGS} -tags=nosqlite"
