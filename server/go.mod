@@ -12,9 +12,12 @@ require (
 	github.com/anacrolix/missinggo/v2 v2.7.3
 	github.com/anacrolix/publicip v0.3.0
 	github.com/anacrolix/torrent v1.54.0
+	github.com/cyruzin/golang-tmdb v1.5.8
+	github.com/essentialkaos/translit v2.0.3+incompatible
 	github.com/gin-contrib/cors v1.5.0
 	github.com/gin-contrib/location v0.0.2
 	github.com/gin-gonic/gin v1.9.1
+	github.com/ilyakaznacheev/cleanenv v1.5.0
 	github.com/kljensen/snowball v0.9.0
 	github.com/pkg/browser v0.0.0-20240102092130-5ac0b6a4141c
 	github.com/pkg/errors v0.9.1
@@ -29,6 +32,7 @@ require (
 )
 
 require (
+	github.com/BurntSushi/toml v1.2.1 // indirect
 	github.com/KyleBanks/depth v1.2.1 // indirect
 	github.com/RoaringBitmap/roaring v1.9.0 // indirect
 	github.com/alecthomas/atomic v0.1.0-alpha2 // indirect
@@ -67,6 +71,7 @@ require (
 	github.com/google/btree v1.1.2 // indirect
 	github.com/google/go-cmp v0.6.0 // indirect
 	github.com/huandu/xstrings v1.4.0 // indirect
+	github.com/joho/godotenv v1.5.1 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.6 // indirect
@@ -90,4 +95,6 @@ require (
 	golang.org/x/tools v0.18.0 // indirect
 	google.golang.org/protobuf v1.32.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
+	olympos.io/encoding/edn v0.0.0-20201019073823-d3554ca0b0a3 // indirect
+	pkg.re/essentialkaos/check.v1 v1.2.0 // indirect
 )

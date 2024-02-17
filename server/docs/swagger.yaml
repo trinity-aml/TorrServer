@@ -130,6 +130,8 @@ definitions:
         description: 0 - don`t add, 1 - add retrackers (def), 2 - remove retrackers
           3 - replace retrackers
         type: integer
+      rutorSearchAddr:
+        type: string
       sslCert:
         type: string
       sslKey:
@@ -621,43 +623,6 @@ paths:
         "200":
           description: Data returned according to query
       summary: Multi usage endpoint
-      tags:
-      - API
-  /torrent/upload:
-    post:
-      consumes:
-      - multipart/form-data
-      description: Only one file support.
-      parameters:
-      - description: Torrent file to insert
-        in: formData
-        name: file
-        required: true
-        type: file
-      - description: Save to DB
-        in: formData
-        name: save
-        type: string
-      - description: Torrent title
-        in: formData
-        name: title
-        type: string
-      - description: Torrent poster
-        in: formData
-        name: poster
-        type: string
-      - description: Torrent data
-        in: formData
-        name: data
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Torrent status
-          schema:
-            $ref: '#/definitions/state.TorrentStatus'
-      summary: Only one file support
       tags:
       - API
   /torrents:

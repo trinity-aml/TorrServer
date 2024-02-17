@@ -490,62 +490,6 @@
                 }
             }
         },
-        "/torrent/upload": {
-            "post": {
-                "description": "Only one file support.",
-                "consumes": [
-                    "multipart/form-data"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "API"
-                ],
-                "summary": "Only one file support",
-                "parameters": [
-                    {
-                        "type": "file",
-                        "description": "Torrent file to insert",
-                        "name": "file",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "Save to DB",
-                        "name": "save",
-                        "in": "formData"
-                    },
-                    {
-                        "type": "string",
-                        "description": "Torrent title",
-                        "name": "title",
-                        "in": "formData"
-                    },
-                    {
-                        "type": "string",
-                        "description": "Torrent poster",
-                        "name": "poster",
-                        "in": "formData"
-                    },
-                    {
-                        "type": "string",
-                        "description": "Torrent data",
-                        "name": "data",
-                        "in": "formData"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Torrent status",
-                        "schema": {
-                            "$ref": "#/definitions/state.TorrentStatus"
-                        }
-                    }
-                }
-            }
-        },
         "/torrents": {
             "post": {
                 "description": "Allow to add, get or set torrents to server. The action depends of what has been asked.",
@@ -806,6 +750,9 @@
                 "retrackersMode": {
                     "description": "0 - don`t add, 1 - add retrackers (def), 2 - remove retrackers 3 - replace retrackers",
                     "type": "integer"
+                },
+                "rutorSearchAddr": {
+                    "type": "string"
                 },
                 "sslCert": {
                     "type": "string"

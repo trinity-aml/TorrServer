@@ -110,8 +110,8 @@ github.com/chenzhuoyu/iasm v0.9.1 h1:tUHQJXo3NhBqw6s33wkGn9SP3bvrWLdlVIJ3hQBL7P0
 github.com/chenzhuoyu/iasm v0.9.1/go.mod h1:Xjy2NpN3h7aUqeqM+woSuuvxmIe6+DDsiNLIrkAmYog=
 github.com/client9/misspell v0.3.4/go.mod h1:qj6jICC3Q7zFZvVWo7KLAzC3yx5G7kyvSDkc90ppPyw=
 github.com/creack/pty v1.1.9/go.mod h1:oKZEueFk5CKHvIhNR5MUki03XCEU+Q6VDXinZuGJ33E=
-github.com/cyruzin/golang-tmdb v1.5.6 h1:9Q7iXpwkQH1mExYPNRAPVfS7Jm/fW2giS43USZ11mAk=
-github.com/cyruzin/golang-tmdb v1.5.6/go.mod h1:ZSryJLCcY+9TiKU+LbouXKns++YBrM8Tizannr05c+I=
+github.com/cyruzin/golang-tmdb v1.5.8 h1:osKTW2NFEb0kY+5TctNXtTRk6IoUGF/Q4uVzWdPKYkQ=
+github.com/cyruzin/golang-tmdb v1.5.8/go.mod h1:ZSryJLCcY+9TiKU+LbouXKns++YBrM8Tizannr05c+I=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
@@ -127,8 +127,8 @@ github.com/eapache/go-xerial-snappy v0.0.0-20180814174437-776d5712da21/go.mod h1
 github.com/eapache/queue v1.1.0/go.mod h1:6eCeP0CKFpHLu8blIFXhExK/dRa7WDZfr6jVFPTqq+I=
 github.com/edsrzf/mmap-go v1.1.0 h1:6EUwBLQ/Mcr1EYLE4Tn1VdW1A4ckqCQWZBw8Hr0kjpQ=
 github.com/edsrzf/mmap-go v1.1.0/go.mod h1:19H/e8pUPLicwkyNgOykDXkJ9F0MHE+Z52B8EIth78Q=
-github.com/essentialkaos/translit v2.0.4-0.20210911112006-c41f422f9ee7+incompatible h1:AaYEK9Qp8yoQdxEy5jcdp/If8VqXSzjfFlss76bS7pk=
-github.com/essentialkaos/translit v2.0.4-0.20210911112006-c41f422f9ee7+incompatible/go.mod h1:ylbWodNFD51eQ8HNXrNwm+e5DD+rmHwQ5cC5QyPl1lA=
+github.com/essentialkaos/translit v2.0.3+incompatible h1:ve7G/7KlwCo4XjWoAgcQC7neTtYcKOVrToYZSffkCAc=
+github.com/essentialkaos/translit v2.0.3+incompatible/go.mod h1:ylbWodNFD51eQ8HNXrNwm+e5DD+rmHwQ5cC5QyPl1lA=
 github.com/frankban/quicktest v1.14.4/go.mod h1:4ptaffx2x8+WTWXmUCuVU6aPUX1/Mz7zb5vbUoiM6w0=
 github.com/frankban/quicktest v1.14.6 h1:7Xjx+VpznH+oBnejlPUj8oUpdxnVs4f8XU8WnHkI4W8=
 github.com/frankban/quicktest v1.14.6/go.mod h1:4ptaffx2x8+WTWXmUCuVU6aPUX1/Mz7zb5vbUoiM6w0=
