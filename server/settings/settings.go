@@ -53,7 +53,6 @@ func InitSets(readOnly, searchWA bool) {
 	}
 	loadBTSets()
 	Migrate1()
-
 }
 
 func CloseDB() {
