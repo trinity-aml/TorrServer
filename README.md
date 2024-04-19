@@ -191,6 +191,27 @@ https://github.com/vladlenas
 
 Synology NAS packages repo source: https://grigi.lt
 
+### Development
+
+#### Go server
+
+To run the Go server locally, just run
+
+```bash
+cd server
+go run ./cmd
+```
+
+#### Web development
+
+To run the web server locally, just run
+
+```bash
+yarn start
+```
+
+More info at https://github.com/YouROK/TorrServer/tree/master/web#readme
+
 ### Build
 
 #### Server
@@ -233,9 +254,9 @@ Enter current ip address and port of server _e.g. 127.0.0.1:8090_
 
 API documentation is hosted as Swagger format available at path `/swagger/index.html`.
 
-### API Authentication
+## Authentication
 
-The user data file should be located near to the settings. Basic auth, read more in wiki <https://en.wikipedia.org/wiki/Basic_access_authentication>.
+The users data file should be located near to the settings. Basic auth, read more in wiki <https://en.wikipedia.org/wiki/Basic_access_authentication>.
 
 `accs.db` in JSON format:
 
@@ -245,6 +266,7 @@ The user data file should be located near to the settings. Basic auth, read more
     "User2": "Pass2"
 }
 ```
+Note: You should enable authentication with -a (--httpauth) TorrServer startup option.
 
 ## Whitelist/Blacklist IP
 
@@ -286,7 +308,7 @@ local:127.0.0.1
 - [FaintGhost](https://github.com/FaintGhost) Zhang Yaowei for Simplified Chinese web translation
 - [Anton111111](https://github.com/Anton111111) Anton Potekhin for sleep on Windows fixes
 - [lieranderl](https://github.com/lieranderl) Evgeni for adding SSL support code
-- [cocool97](https://github.com/cocool97) for openapi API documentation
+- [cocool97](https://github.com/cocool97) for openapi API documentation and torrent categories
 - [shadeov](https://github.com/shadeov) for README improvements
 - [butaford](https://github.com/butaford) Pavel for make docker file and scripts
 - [filimonic](https://github.com/filimonic) Alexey D. Filimonov
