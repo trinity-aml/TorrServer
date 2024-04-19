@@ -12,8 +12,10 @@ require (
 	github.com/anacrolix/missinggo/v2 v2.7.3
 	github.com/anacrolix/publicip v0.3.1
 	github.com/anacrolix/torrent v1.54.1
-	github.com/gin-contrib/cors v1.7.1
-	github.com/gin-contrib/location v1.0.0
+	github.com/cyruzin/golang-tmdb v1.6.0
+	github.com/essentialkaos/translit v2.0.3+incompatible
+	github.com/gin-contrib/cors v1.5.0
+	github.com/gin-contrib/location v0.0.2
 	github.com/gin-gonic/gin v1.9.1
 	github.com/ilyakaznacheev/cleanenv v1.5.0
 	github.com/kljensen/snowball v0.9.0
