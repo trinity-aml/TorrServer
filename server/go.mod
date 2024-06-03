@@ -1,6 +1,8 @@
 module server
 
-go 1.20
+go 1.21
+
+toolchain go1.22.2
 
 replace github.com/anacrolix/torrent v1.54.1 => github.com/tsynik/torrent v1.2.22
 
@@ -12,14 +14,11 @@ require (
 	github.com/anacrolix/missinggo/v2 v2.7.3
 	github.com/anacrolix/publicip v0.3.1
 	github.com/anacrolix/torrent v1.54.1
+	github.com/cyruzin/golang-tmdb v1.6.0
+	github.com/essentialkaos/translit v2.0.3+incompatible
 	github.com/gin-contrib/cors v1.7.2
 	github.com/gin-contrib/location v1.0.1
 	github.com/gin-gonic/gin v1.10.0
-	github.com/cyruzin/golang-tmdb v1.6.0
-	github.com/essentialkaos/translit v2.0.3+incompatible
-	github.com/gin-contrib/cors v1.5.0
-	github.com/gin-contrib/location v0.0.2
-	github.com/gin-gonic/gin v1.9.1
 	github.com/ilyakaznacheev/cleanenv v1.5.0
 	github.com/kljensen/snowball v0.9.0
 	github.com/pkg/browser v0.0.0-20240102092130-5ac0b6a4141c
