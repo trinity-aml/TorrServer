@@ -68,7 +68,7 @@ func torrents(c *gin.Context) {
 		}
 	case "list":
 		{
-			listTorrent(req, c)
+			listTorrents(c)
 		}
 	case "drop":
 		{
@@ -76,7 +76,7 @@ func torrents(c *gin.Context) {
 		}
 	case "wipe":
 		{
-			wipeTorrents(req, c)
+			wipeTorrents(c)
 		}
 	}
 }
@@ -98,10 +98,10 @@ func addTorrent(req torrReqJS, c *gin.Context) {
 
 	tor, err := torr.AddTorrent(torrSpec, req.Title, req.Poster, req.Data, req.Category)
 
-	if tor.Data != "" {
+	if tor.Data != "" && set.BTsets.EnableDebug {
 		log.TLogln("torrent data:", tor.Data)
 	}
-	if tor.Category != "" {
+	if tor.Category != "" && set.BTsets.EnableDebug {
 		log.TLogln("torrent category:", tor.Category)
 	}
 
@@ -182,7 +182,7 @@ func remTorrent(req torrReqJS, c *gin.Context) {
 	c.Status(200)
 }
 
-func listTorrent(req torrReqJS, c *gin.Context) {
+func listTorrents(c *gin.Context) {
 	list := torr.ListTorrent()
 	if len(list) == 0 {
 		c.JSON(200, []*state.TorrentStatus{})
@@ -204,7 +204,7 @@ func dropTorrent(req torrReqJS, c *gin.Context) {
 	c.Status(200)
 }
 
-func wipeTorrents(req torrReqJS, c *gin.Context) {
+func wipeTorrents(c *gin.Context) {
 	torrents := torr.ListTorrent()
 	for _, t := range torrents {
 		torr.RemTorrent(t.TorrentSpec.InfoHash.HexString())

@@ -151,6 +151,6 @@ func loadBTSets() {
 		}
 		log.TLogln("Error unmarshal btsets", err)
 	}
-
+	// initialize defaults on error
 	SetDefaultConfig()
 }

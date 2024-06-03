@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"server/log"
+	set "server/settings"
 	"server/torr"
 	"server/web/api/utils"
 
@@ -103,10 +104,10 @@ func torrentUpload(c *gin.Context) {
 
 		tor, err = torr.AddTorrent(spec, title, poster, data, category)
 
-		if tor.Data != "" {
+		if tor.Data != "" && set.BTsets.EnableDebug {
 			log.TLogln("torrent data:", tor.Data)
 		}
-		if tor.Category != "" {
+		if tor.Category != "" && set.BTsets.EnableDebug {
 			log.TLogln("torrent category:", tor.Category)
 		}
 
