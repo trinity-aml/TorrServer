@@ -35,7 +35,6 @@ export default function SecondarySettingsComponent({ settings, inputForm }) {
     UploadRateLimit,
     ConnectionsLimit,
     PeersListenPort,
-    ResponsiveMode,
     SslPort,
     SslCert,
     SslKey,
@@ -210,11 +209,6 @@ export default function SecondarySettingsComponent({ settings, inputForm }) {
       <FormControlLabel
         control={<Switch checked={EnableDebug} onChange={inputForm} id='EnableDebug' color='secondary' />}
         label={t('SettingsDialog.EnableDebug')}
-        labelPlacement='start'
-      />
-      <FormControlLabel
-        control={<Switch checked={ResponsiveMode} onChange={inputForm} id='ResponsiveMode' color='secondary' />}
-        label={t('SettingsDialog.ResponsiveMode')}
         labelPlacement='start'
       />
       <br />
