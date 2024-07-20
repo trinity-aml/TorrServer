@@ -14,7 +14,7 @@ require (
 	github.com/anacrolix/missinggo/v2 v2.7.3
 	github.com/anacrolix/publicip v0.3.1
 	github.com/anacrolix/torrent v1.54.1
-	github.com/cyruzin/golang-tmdb v1.6.0
+	github.com/cyruzin/golang-tmdb v1.6.4
 	github.com/essentialkaos/translit v2.0.3+incompatible
 	github.com/gin-contrib/cors v1.7.2
 	github.com/gin-contrib/location v1.0.1
