@@ -4,11 +4,13 @@ import (
 	"fmt"
 	tmdb "github.com/cyruzin/golang-tmdb"
 	"github.com/essentialkaos/translit"
+	"math"
 	"regexp"
 	"server/config"
 	"server/log"
 	"strconv"
 	"strings"
+	"time"
 )
 
 var tor_q = []string{
@@ -47,7 +49,7 @@ var tor_q = []string{
 }
 
 var (
-	time, _  = regexp.Compile("[0-9][0-9][0-9][0-9]")
+	time2, _ = regexp.Compile("[0-9][0-9][0-9][0-9]")
 	sq, _    = regexp.Compile("\\[[a-zA-Zа-яА-Я0-9-[:space:]+.,].+\\]")
 	ss, _    = regexp.Compile("[Ss][0-9][0-9]")
 	ee, _    = regexp.Compile("[Ee][0-9][0-9]")
@@ -60,10 +62,23 @@ var (
 	cyr, _   = regexp.Compile("[А-Яа-я]+")
 )
 
-func getUtil(str string, tv bool, movie bool) string {
+func getYear(str string) int {
+	layout := "2006-01-02"
+	date, err := time.Parse(layout, str)
+	if err != nil {
+		return 0
+	}
+	year, _, _ := date.Date()
+	return year
+}
+
+func getUtil(str string, tv bool, movie bool, y int) string {
 
 	var media_type string
 	var poster = "https://image.tmdb.org/t/p/original"
+	var year int
+	var year_1 int
+	var year_2 int
 
 	tmdbClient, err := tmdb.Init(config.ReadConfigParser2("Api_key"))
 
@@ -83,7 +98,22 @@ func getUtil(str string, tv bool, movie bool) string {
 			media_type = "movie"
 		}
 		for o := 0; o < int(search.TotalResults); o++ {
-			if search.Results[o].MediaType == media_type {
+			if search.Results[o].ReleaseDate != "" {
+				year_1 = getYear(search.Results[o].ReleaseDate)
+			}
+			if search.Results[o].FirstAirDate != "" {
+				year_2 = getYear(search.Results[o].FirstAirDate)
+			}
+			if year_1 != 0 {
+				year = year_1
+			} else if year_2 != 0 {
+				year = year_2
+			}
+			if y == 0 || (int(math.Abs(float64(y-year))) == 1) {
+				year = 0
+				y = 0
+			}
+			if search.Results[o].MediaType == media_type && y == year {
 				log.TLogln("Poster:", poster+search.Results[o].PosterPath)
 				return poster + search.Results[o].PosterPath
 			}
@@ -97,9 +127,10 @@ func getUtil(str string, tv bool, movie bool) string {
 }
 
 func GetPoster(name string) string {
-	var year = 0
+	var year int
 	var movie = true
 	var tv = false
+	var en_rus int
 
 	name = strings.ReplaceAll(name, ".", " ")
 	name = strings.ReplaceAll(name, "_", " ")
@@ -120,17 +151,19 @@ func GetPoster(name string) string {
 	}
 
 	for _, word := range nameMass {
-		if len(time.FindString(word)) > 0 {
+		if len(time2.FindString(word)) > 0 && time2.FindString(word) != "1080" && time2.FindString(word) != "2160" {
 			if strings.Contains(word, "-") {
 				for _, a := range word {
-					year, _ = strconv.Atoi(time.FindString(strconv.Itoa(int(a))))
+					year, _ = strconv.Atoi(time2.FindString(strconv.Itoa(int(a))))
 					break
 				}
 			} else {
-				year, _ = strconv.Atoi(time.FindString(word))
+				year, _ = strconv.Atoi(time2.FindString(word))
 			}
 		}
 	}
+
+	log.TLogln("YEAR:", year)
 
 	for i, word := range nameMass {
 		for _, word2 := range tor_q {
@@ -141,7 +174,7 @@ func GetPoster(name string) string {
 				nameMass = nameMass[:i]
 			}
 		}
-		if len(time.FindString(word)) > 0 {
+		if len(time2.FindString(word)) > 0 {
 			for m := i; m < len(nameMass); m++ {
 				nameMass[m] = ""
 			}
@@ -169,14 +202,16 @@ func GetPoster(name string) string {
 			out := latin.FindString(word)
 			if len(out) > 2 {
 				nameMassNew = word
+				en_rus = 1
 				break
 			}
 		}
-		if len(nameMassNew) > 0 {
+		if en_rus == 1 {
 			nameMassNew = strings.Trim(nameMassNew, " ")
 		} else {
 			for _, word2 := range nameMass {
 				nameMassNew = word2
+				en_rus = 0
 				break
 			}
 			if len(nameMassNew) > 0 {
@@ -194,13 +229,11 @@ func GetPoster(name string) string {
 		log.TLogln(nameMassNew2)
 	}
 
-	if len(getUtil(nameMassNew+strconv.Itoa(year), tv, movie)) > 0 {
-		return getUtil(nameMassNew+strconv.Itoa(year), tv, movie)
-	} else if len(getUtil(nameMassNew, tv, movie)) > 0 {
-		return getUtil(nameMassNew, tv, movie)
-	} else if len(getUtil(nameMassNew2, tv, movie)) > 0 {
-		return getUtil(nameMassNew2, tv, movie)
-	} else {
-		return ""
+	if len(getUtil(nameMassNew, tv, movie, year)) > 0 {
+		return getUtil(nameMassNew, tv, movie, year)
 	}
+	if len(getUtil(nameMassNew2, tv, movie, year)) > 0 {
+		return getUtil(nameMassNew2, tv, movie, year)
+	}
+	return ""
 }
