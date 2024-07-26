@@ -76,9 +76,9 @@ func getUtil(str string, tv bool, movie bool, y int) string {
 
 	var media_type string
 	var poster = "https://image.tmdb.org/t/p/original"
-	var year int
-	var year_1 int
-	var year_2 int
+	var year = 0
+	var year_1 = 0
+	var year_2 = 0
 
 	tmdbClient, err := tmdb.Init(config.ReadConfigParser2("Api_key"))
 
@@ -110,8 +110,7 @@ func getUtil(str string, tv bool, movie bool, y int) string {
 				year = year_2
 			}
 			if y == 0 || (int(math.Abs(float64(y-year))) == 1) {
-				year = 0
-				y = 0
+				y = year
 			}
 			if search.Results[o].MediaType == media_type && y == year {
 				log.TLogln("Poster:", poster+search.Results[o].PosterPath)
@@ -122,7 +121,6 @@ func getUtil(str string, tv bool, movie bool, y int) string {
 		fmt.Println(err2)
 		return ""
 	}
-
 	return ""
 }
 
@@ -229,11 +227,20 @@ func GetPoster(name string) string {
 		log.TLogln(nameMassNew2)
 	}
 
-	if len(getUtil(nameMassNew, tv, movie, year)) > 0 {
-		return getUtil(nameMassNew, tv, movie, year)
+	a := getUtil(nameMassNew, tv, movie, year)
+	b := getUtil(nameMassNew2, tv, movie, year)
+	c := getUtil(nameMassNew, tv, movie, 0)
+	d := getUtil(nameMassNew2, tv, movie, 0)
+	e := ""
+
+	if len(a) > 1 {
+		e = a
+	} else if len(b) > 1 {
+		e = b
+	} else if len(c) > 1 {
+		e = c
+	} else if len(d) > 1 {
+		e = d
 	}
-	if len(getUtil(nameMassNew2, tv, movie, year)) > 0 {
-		return getUtil(nameMassNew2, tv, movie, year)
-	}
-	return ""
+	return e
 }
