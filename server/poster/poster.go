@@ -86,10 +86,13 @@ func getUtil(str string, tv bool, movie bool, y int) string {
 		fmt.Println(err)
 	}
 
-	options := make(map[string]string)
-	options["language"] = "ru-RU"
+	//	options := make(map[string]string)
+	//	options["language"] = "ru-RU"
 
-	search, err2 := tmdbClient.GetSearchMulti(str, options)
+	search, err2 := tmdbClient.GetSearchMulti(str, nil)
+	total_r := search.TotalResults
+	release_d := ""
+	fist_air := ""
 
 	if err2 == nil {
 		if tv == true {
@@ -97,12 +100,14 @@ func getUtil(str string, tv bool, movie bool, y int) string {
 		} else if movie == true {
 			media_type = "movie"
 		}
-		for o := 0; o < int(search.TotalResults); o++ {
-			if search.Results[o].ReleaseDate != "" {
-				year_1 = getYear(search.Results[o].ReleaseDate)
+		for o := 0; o < int(total_r) && (len(search.Results[o].ReleaseDate) != 0 || len(search.Results[o].FirstAirDate) != 0); o++ {
+			release_d = search.Results[o].ReleaseDate
+			fist_air = search.Results[o].FirstAirDate
+			if release_d != "" {
+				year_1 = getYear(release_d)
 			}
-			if search.Results[o].FirstAirDate != "" {
-				year_2 = getYear(search.Results[o].FirstAirDate)
+			if fist_air != "" {
+				year_2 = getYear(fist_air)
 			}
 			if year_1 != 0 {
 				year = year_1
@@ -117,11 +122,11 @@ func getUtil(str string, tv bool, movie bool, y int) string {
 				return poster + search.Results[o].PosterPath
 			}
 		}
+		return ""
 	} else {
 		fmt.Println(err2)
 		return ""
 	}
-	return ""
 }
 
 func GetPoster(name string) string {
@@ -227,20 +232,25 @@ func GetPoster(name string) string {
 		log.TLogln(nameMassNew2)
 	}
 
-	a := getUtil(nameMassNew, tv, movie, year)
-	b := getUtil(nameMassNew2, tv, movie, year)
-	c := getUtil(nameMassNew, tv, movie, 0)
-	d := getUtil(nameMassNew2, tv, movie, 0)
-	e := ""
-
-	if len(a) > 1 {
-		e = a
-	} else if len(b) > 1 {
-		e = b
-	} else if len(c) > 1 {
-		e = c
-	} else if len(d) > 1 {
-		e = d
+	e := getUtil(nameMassNew, tv, movie, year)
+	if e != "" {
+		return e
+	} else {
+		e = getUtil(nameMassNew2, tv, movie, year)
+		if e != "" {
+			return e
+		} else {
+			e = getUtil(nameMassNew, tv, movie, 0)
+			if e != "" {
+				return e
+			} else {
+				e = getUtil(nameMassNew2, tv, movie, 0)
+				if e != "" {
+					return e
+				} else {
+					return ""
+				}
+			}
+		}
 	}
-	return e
 }
