@@ -72,6 +72,39 @@ func getYear(str string) int {
 	return year
 }
 
+func compareStr(name string, str string) int {
+	i := 0
+	k := 0
+	reg, err := regexp.Compile("[^a-zA-Zа-яА-Я0-9]+")
+	if err == nil {
+		name = reg.ReplaceAllString(name, "")
+		str = reg.ReplaceAllString(str, "")
+	} else {
+		fmt.Println(err)
+	}
+	name = strings.ToLower(name)
+	str = strings.ToLower(str)
+	if int(math.Abs(float64(len(name)-len(str)))) > 3 {
+		return 0
+	}
+	for _, a := range name {
+		for _, b := range str {
+			if a == b {
+				i = 1
+				k = 1
+				break
+			} else {
+				k = 0
+			}
+		}
+		if k == 0 {
+			i = 0
+			break
+		}
+	}
+	return i
+}
+
 func getUtil(str string, tv bool, movie bool, y int) string {
 
 	var media_type string
@@ -93,6 +126,8 @@ func getUtil(str string, tv bool, movie bool, y int) string {
 	total_r := search.TotalResults
 	release_d := ""
 	fist_air := ""
+	comp := 0
+	bypass := ""
 
 	if err2 == nil {
 		if tv == true {
@@ -117,12 +152,26 @@ func getUtil(str string, tv bool, movie bool, y int) string {
 			if y == 0 || (int(math.Abs(float64(y-year))) == 1) {
 				y = year
 			}
-			if search.Results[o].MediaType == media_type && y == year {
+			if search.Results[o].Name != "" {
+				comp = compareStr(str, search.Results[o].Name)
+			} else if search.Results[o].OriginalName != "" {
+				comp = compareStr(str, search.Results[o].OriginalName)
+			} else if search.Results[o].Title != "" {
+				comp = compareStr(str, search.Results[o].Title)
+			}
+			if search.Results[o].MediaType == media_type && y == year && comp == 1 {
 				log.TLogln("Poster:", poster+search.Results[o].PosterPath)
 				return poster + search.Results[o].PosterPath
+			} else if search.Results[o].MediaType == media_type && y == year && comp == 0 {
+				log.TLogln("Poster:", poster+search.Results[o].PosterPath)
+				bypass = poster + search.Results[o].PosterPath
 			}
 		}
-		return ""
+		if bypass != "" {
+			return bypass
+		} else {
+			return ""
+		}
 	} else {
 		fmt.Println(err2)
 		return ""
