@@ -119,15 +119,16 @@ func getUtil(str string, tv bool, movie bool, y int) string {
 		fmt.Println(err)
 	}
 
-	//	options := make(map[string]string)
-	//	options["language"] = "ru-RU"
+	options := make(map[string]string)
+	options["language"] = "ru-RU"
 
 	search, err2 := tmdbClient.GetSearchMulti(str, nil)
-	total_r := search.TotalResults
+	total_r := int(search.TotalResults)
 	release_d := ""
 	fist_air := ""
 	comp := 0
 	bypass := ""
+	i := 0
 
 	if err2 == nil {
 		if tv == true {
@@ -135,7 +136,7 @@ func getUtil(str string, tv bool, movie bool, y int) string {
 		} else if movie == true {
 			media_type = "movie"
 		}
-		for o := 0; o < int(total_r) && (len(search.Results[o].ReleaseDate) != 0 || len(search.Results[o].FirstAirDate) != 0); o++ {
+		for o := 0; o < total_r && i == 0; o++ {
 			release_d = search.Results[o].ReleaseDate
 			fist_air = search.Results[o].FirstAirDate
 			if release_d != "" {
@@ -161,9 +162,11 @@ func getUtil(str string, tv bool, movie bool, y int) string {
 			}
 			if search.Results[o].MediaType == media_type && y == year && comp == 1 {
 				log.TLogln("Poster:", poster+search.Results[o].PosterPath)
+				i = 1
 				return poster + search.Results[o].PosterPath
 			} else if search.Results[o].MediaType == media_type && y == year && comp == 0 {
 				log.TLogln("Poster:", poster+search.Results[o].PosterPath)
+				i = 1
 				bypass = poster + search.Results[o].PosterPath
 			}
 		}
