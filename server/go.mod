@@ -7,19 +7,19 @@ toolchain go1.22.2
 replace github.com/anacrolix/torrent v1.54.1 => github.com/tsynik/torrent v1.2.22
 
 require (
-	github.com/agnivade/levenshtein v1.1.1
+	github.com/agnivade/levenshtein v1.2.0
 	github.com/alexflint/go-arg v1.5.0
 	github.com/anacrolix/dms v1.6.0
 	github.com/anacrolix/log v0.15.2
 	github.com/anacrolix/missinggo/v2 v2.7.3
 	github.com/anacrolix/publicip v0.3.1
 	github.com/anacrolix/torrent v1.54.1
-	github.com/cyruzin/golang-tmdb v1.6.4
-	github.com/essentialkaos/translit v2.0.3+incompatible
+	github.com/cyruzin/golang-tmdb v1.6.7
+	github.com/essentialkaos/translit v2.0.4-0.20210911112006-c41f422f9ee7+incompatible
 	github.com/gin-contrib/cors v1.7.2
 	github.com/gin-contrib/location v1.0.1
 	github.com/gin-gonic/gin v1.10.0
-	github.com/ilyakaznacheev/cleanenv v1.5.0
+	github.com/ilyakaznacheev/cleanenv v1.5.1-0.20230904122850-8ca6c6a9ec7a
 	github.com/kljensen/snowball v0.9.0
 	github.com/pkg/browser v0.0.0-20240102092130-5ac0b6a4141c
 	github.com/pkg/errors v0.9.1
