@@ -126,9 +126,9 @@ func getUtil(str string, tv bool, movie bool, y int) string {
 	release_d := ""
 	fist_air := ""
 	comp := 0
-	i := 0
 	exit := ""
 	bypass := ""
+	bypassA := ""
 
 	if err2 == nil {
 		if tv == true {
@@ -136,9 +136,9 @@ func getUtil(str string, tv bool, movie bool, y int) string {
 		} else if movie == true {
 			media_type = "movie"
 		}
-		for o := 0; o < len(search.Results) && i == 0; o++ {
-			release_d = search.Results[o].ReleaseDate
-			fist_air = search.Results[o].FirstAirDate
+		for o, v := range search.Results {
+			release_d = v.ReleaseDate
+			fist_air = v.FirstAirDate
 			if release_d != "" {
 				year_1 = getYear(release_d)
 			}
@@ -155,25 +155,38 @@ func getUtil(str string, tv bool, movie bool, y int) string {
 			if y == 0 || (int(math.Abs(float64(y-year))) == 1) {
 				y = year
 			}
-			if search.Results[o].Name != "" {
-				comp = compareStr(str, search.Results[o].Name)
-			} else if search.Results[o].OriginalName != "" {
-				comp = compareStr(str, search.Results[o].OriginalName)
+			if v.Name != "" {
+				comp = compareStr(str, v.Name)
+			} else if v.OriginalName != "" {
+				comp = compareStr(str, v.OriginalName)
 			} else if search.Results[o].Title != "" {
-				comp = compareStr(str, search.Results[o].Title)
+				comp = compareStr(str, v.Title)
 			}
-			if search.Results[o].MediaType == media_type && y == year && comp == 1 {
-				log.TLogln("Poster:", poster+search.Results[o].PosterPath)
-				i = 1
-				exit = poster + search.Results[o].PosterPath
-			} else if search.Results[o].MediaType == media_type && y == year && comp == 0 {
-				log.TLogln("Poster:", poster+search.Results[o].PosterPath)
-				i = 1
-				bypass = poster + search.Results[o].PosterPath
+			if v.MediaType == media_type && y == year && comp == 1 && v.PosterPath != "" {
+				log.TLogln("Poster:", poster+v.PosterPath)
+				exit = poster + v.PosterPath
+				break
+			} else if v.MediaType != media_type && y == year && comp == 1 && v.PosterPath != "" {
+				if media_type == "tv" {
+					if v.MediaType == "movie" {
+						log.TLogln("Poster:", poster+v.PosterPath)
+						bypassA = poster + v.PosterPath
+					}
+				} else if media_type == "movie" {
+					if v.MediaType == "tv" {
+						log.TLogln("Poster:", poster+v.PosterPath)
+						bypassA = poster + v.PosterPath
+					}
+				}
+			} else if v.MediaType == media_type && y == year && comp == 0 && v.PosterPath != "" {
+				log.TLogln("Poster:", poster+v.PosterPath)
+				bypass = poster + v.PosterPath
 			}
 		}
 		if exit != "" {
 			return exit
+		} else if bypassA != "" {
+			return bypassA
 		} else if bypass != "" {
 			return bypass
 		} else {
