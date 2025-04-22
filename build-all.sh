@@ -103,8 +103,8 @@ declare -a COMPILERS=(
   "amd64:x86_64-linux-android21-clang"
 )
 
-export NDK_VERSION="25.2.9519653" # 25.1.8937393
-export NDK_TOOLCHAIN="${PWD}/../../../android-ndk-r25c/toolchains/llvm/prebuilt/linux-x86_64"
+export NDK_VERSION="27.2.12479018" # 27.2.12479018
+export NDK_TOOLCHAIN="${PWD}/../../../android-ndk-r27c/toolchains/llvm/prebuilt/linux-x86_64"
 
 GOOS=android
 
