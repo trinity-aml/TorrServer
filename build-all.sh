@@ -16,6 +16,7 @@ PLATFORMS=(
   'linux/mipsle'
   'linux/mips64'
   'linux/mips64le'
+  'linux/riscv64'
 )
 
 type setopt >/dev/null 2>&1
@@ -141,3 +142,6 @@ if [[ "${FAILURES}" != "" ]]; then
   echo "failed on: ${FAILURES}"
   exit 1
 fi
+
+cd "${ROOT}/docker/lite" || exit 1
+./makedocker.sh
