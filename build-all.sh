@@ -142,6 +142,3 @@ if [[ "${FAILURES}" != "" ]]; then
   echo "failed on: ${FAILURES}"
   exit 1
 fi
-
-cd "${ROOT}/docker/lite" || exit 1
-./makedocker.sh
