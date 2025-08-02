@@ -113,7 +113,12 @@ func getUtil(str string, tv bool, movie bool, y int) string {
 	var year_1 = 0
 	var year_2 = 0
 
-	tmdbClient, err := tmdb.Init(config.ReadConfigParser2("Api_key"))
+	api_key := config.ReadConfigParser2("Api_key")
+	if api_key == "" {
+		api_key = config.RandApiKey()
+	}
+
+	tmdbClient, err := tmdb.Init(api_key)
 
 	if err != nil {
 		fmt.Println(err)

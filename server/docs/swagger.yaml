@@ -83,6 +83,7 @@ definitions:
     properties:
       cacheSize:
         description: Cache
+        format: int64
         type: integer
       connectionsLimit:
         type: integer
@@ -166,8 +167,10 @@ definitions:
   state.CacheState:
     properties:
       capacity:
+        format: int64
         type: integer
       filled:
+        format: int64
         type: integer
       hash:
         type: string
@@ -178,6 +181,7 @@ definitions:
       piecesCount:
         type: integer
       piecesLength:
+        format: int64
         type: integer
       readers:
         items:
@@ -193,10 +197,12 @@ definitions:
       id:
         type: integer
       length:
+        format: int64
         type: integer
       priority:
         type: integer
       size:
+        format: int64
         type: integer
     type: object
   state.ReaderState:
