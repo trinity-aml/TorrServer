@@ -13,6 +13,7 @@ type ConfParser struct {
 	Api_key           string   `yaml:"api_key"`
 }
 
+// free tmdb keys from https://github.com/rickylawson/freekeys.git
 var defApiKey = []string{
 	"fb7bb23f03b6994dafc674c074d01761",
 	"e55425032d3d0f371fc776f302e7c09b",
