@@ -66,7 +66,8 @@ blacklist_tracker - черный список трекеров
 >             'https://newtrackon.com/api/stable',\
 >             'https://raw.githubusercontent.com/XIU2/TrackersListCollection/master/best.txt']\
 >blacklist_tracker: ['udp://tracker.opentrackr.org:1337/announce',\
->                    'udp://p4p.arenabg.com:1337/announce']
+>                    'udp://p4p.arenabg.com:1337/announce']\
+>api_key: your tmdb api key
 
 ### Installation
 
