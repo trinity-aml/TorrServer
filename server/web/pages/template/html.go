@@ -118,23 +118,23 @@ var Mstile150x150png []byte
 //go:embed pages/site.webmanifest
 var Sitewebmanifest []byte
 
-//go:embed pages/static/js/2.0b2136e5.chunk.js
-var Staticjs20b2136e5chunkjs []byte
+//go:embed pages/static/js/2.16595ca0.chunk.js
+var Staticjs216595ca0chunkjs []byte
 
-//go:embed pages/static/js/2.0b2136e5.chunk.js.LICENSE.txt
-var Staticjs20b2136e5chunkjsLICENSEtxt []byte
+//go:embed pages/static/js/2.16595ca0.chunk.js.LICENSE.txt
+var Staticjs216595ca0chunkjsLICENSEtxt []byte
 
-//go:embed pages/static/js/2.0b2136e5.chunk.js.map
-var Staticjs20b2136e5chunkjsmap []byte
+//go:embed pages/static/js/2.16595ca0.chunk.js.map
+var Staticjs216595ca0chunkjsmap []byte
 
-//go:embed pages/static/js/main.fcb16052.chunk.js
-var Staticjsmainfcb16052chunkjs []byte
+//go:embed pages/static/js/main.6b7b4db5.chunk.js
+var Staticjsmain6b7b4db5chunkjs []byte
 
-//go:embed pages/static/js/main.fcb16052.chunk.js.map
-var Staticjsmainfcb16052chunkjsmap []byte
+//go:embed pages/static/js/main.6b7b4db5.chunk.js.map
+var Staticjsmain6b7b4db5chunkjsmap []byte
 
-//go:embed pages/static/js/runtime-main.b61e6409.js
-var Staticjsruntimemainb61e6409js []byte
+//go:embed pages/static/js/runtime-main.68af93bb.js
+var Staticjsruntimemain68af93bbjs []byte
 
-//go:embed pages/static/js/runtime-main.b61e6409.js.map
-var Staticjsruntimemainb61e6409jsmap []byte
+//go:embed pages/static/js/runtime-main.68af93bb.js.map
+var Staticjsruntimemain68af93bbjsmap []byte
